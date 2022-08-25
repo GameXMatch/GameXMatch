@@ -3,4 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="landing_button">Get Started</string>
     <string name="landing_text">Previous</string>
+    <string name="core_profile_button">Profile</string>
+    <string name="core_swipe_button">Swipe</string>
+    <string name="core_match_button">Match</string>
 </resources>
