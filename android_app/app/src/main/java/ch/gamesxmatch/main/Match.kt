@@ -1,21 +1,21 @@
 package ch.gamesxmatch.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import java.util.Arrays.asList
+import kotlin.collections.ArrayList
 
 class Match : Fragment() {
     // TODO : Data type for the matches
-    // TODO : Adaptor for adding items to the list (Big)
-    // TODO : Click listener for the items, that will open the individual chat
     lateinit var recycleView : RecyclerView
+    var matches = ArrayList<String>(asList("test1", "test2", "test3", "test4", "test5"))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +24,13 @@ class Match : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.activity_match, container, false)
         recycleView = view.findViewById(R.id.match_recycleView)
+        val matchAdaptator = MatchAdaptator(matches)
+        recycleView.layoutManager = LinearLayoutManager(inflater.context)
+        recycleView.adapter = matchAdaptator
+
+        matchAdaptator.onItemClick = {
+            // TODO : Switch the fragment to chat
+        }
 
         return view
     }

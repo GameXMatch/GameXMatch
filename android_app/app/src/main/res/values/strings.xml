@@ -8,4 +8,5 @@
     <string name="core_match_button">Match</string>
     <string name="swipe_left_button">X</string>
     <string name="swipe_right_button">V</string>
+    <string name="match_title">Vos conversations</string>
 </resources>
