@@ -6,20 +6,23 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import ch.gamesxmatch.R
 import ch.gamesxmatch.main.CoreApp
-import ch.gamesxmatch.main.Profile
 
 class Landing : AppCompatActivity() {
+
+    // TODO : Check for credentials
+    // TODO : Nice text
+
     private lateinit var loginButton : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(checkLoggedInt()){
             val intent = Intent(this, CoreApp::class.java)
             startActivity(intent)
+            finish()
         } else {
             setContentView(R.layout.activity_landing)
             loginButton = findViewById(R.id.landing_connect_button)
-            val intent = Intent(this, CoreApp::class.java)
-            //val intent = Intent(this, Login::class.java)
+            val intent = Intent(this, Login::class.java)
             loginButton.setOnClickListener {
                 startActivity(intent)
             }
@@ -28,7 +31,7 @@ class Landing : AppCompatActivity() {
 
     fun checkLoggedInt() : Boolean {
         // TODO
-        return false
+        return true
     }
 
 

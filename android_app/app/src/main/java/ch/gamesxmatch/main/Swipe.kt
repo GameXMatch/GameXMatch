@@ -10,6 +10,12 @@ import androidx.fragment.app.Fragment
 import ch.gamesxmatch.R
 
 class Swipe : Fragment() {
+
+    // TODO : Create data type for the match
+    // TODO : Find a way to display the data
+    // TODO : Implement the swipe logic and refresh of the card
+    // Maybe find something better than a Cardview?
+
     lateinit var btnSwipeLeft : Button
     lateinit var btnSwipeRight : Button
     lateinit var cardView: CardView

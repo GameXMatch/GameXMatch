@@ -1,7 +1,6 @@
 package ch.gamesxmatch.main
 
 import android.os.Bundle
-import android.text.TextUtils.replace
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
