@@ -21,36 +21,32 @@ class CoreApp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_core)
 
-
-
-        //switchFragments(fragmentID, profileFragment)
-
         btnMatch = findViewById(R.id.core_match_button)
         btnSwipe = findViewById(R.id.core_swipe_button)
         btnProfile = findViewById(R.id.core_profile_button)
 
-        initButtonListeners()
+        switchFragmentAndDisableButtons(btnProfile, profileFragment)
 
-        /*
-        supportFragmentManager.beginTransaction().apply {
-            replace(R.id.fragmentContainerView, profileFragment)
-            commit()
-        }
-        */
+        initButtonListeners()
     }
 
     fun initButtonListeners(){
         btnMatch.setOnClickListener{
-            switchFragments(fragmentID, matchFragment)
+            switchFragmentAndDisableButtons(btnMatch, matchFragment)
         }
 
         btnSwipe.setOnClickListener{
-            switchFragments(fragmentID, swipeFragment)
+            switchFragmentAndDisableButtons(btnSwipe, swipeFragment)
         }
 
         btnProfile.setOnClickListener{
-            switchFragments(fragmentID, profileFragment)
+            switchFragmentAndDisableButtons(btnProfile, profileFragment)
         }
+    }
+
+    fun switchFragmentAndDisableButtons(button: Button, fragment: Fragment){
+        switchFragments(fragmentID, fragment)
+        disableClickedAndEnableRest(button)
     }
 
     fun switchFragments(id : Int, profile : Fragment){
@@ -58,5 +54,13 @@ class CoreApp : AppCompatActivity() {
             replace(id, profile)
             commit()
         }
+    }
+
+    fun disableClickedAndEnableRest(button : Button){
+        btnProfile.isEnabled = true
+        btnMatch.isEnabled = true
+        btnSwipe.isEnabled = true
+
+        button.isEnabled = false
     }
 }
