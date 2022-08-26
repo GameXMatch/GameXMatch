@@ -6,8 +6,8 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginStart="1dp"
         android:layout_marginTop="1dp"
         android:orientation="vertical"
@@ -16,38 +16,42 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragmentContainerView"
-            android:name="ch.gamesxmatch.main.Chat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"/>
+            android:layout_height="0dp"
+            android:layout_weight="6" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_weight="8">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/core_profile_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/core_profile_button" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/core_swipe_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="@string/core_swipe_button" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/core_match_button"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/core_profile_button" />
+                android:text="@string/core_match_button" />
+
         </LinearLayout>
+
+
     </LinearLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
