@@ -6,4 +6,6 @@
     <string name="core_profile_button">Profile</string>
     <string name="core_swipe_button">Swipe</string>
     <string name="core_match_button">Match</string>
+    <string name="swipe_left_button">X</string>
+    <string name="swipe_right_button">V</string>
 </resources>
