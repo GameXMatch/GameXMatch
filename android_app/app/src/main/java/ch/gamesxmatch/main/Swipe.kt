@@ -25,7 +25,7 @@ class Swipe : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.activity_swipe, container, false)
+        val view = inflater.inflate(R.layout.fragment_swipe, container, false)
         btnSwipeLeft = view.findViewById(R.id.swipe_left_button)
         btnSwipeRight = view.findViewById(R.id.swipe_right_button)
         cardView = view.findViewById(R.id.swipe_cardview)

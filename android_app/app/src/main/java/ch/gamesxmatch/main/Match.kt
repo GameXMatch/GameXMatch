@@ -1,6 +1,5 @@
 package ch.gamesxmatch.main
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,7 @@ class Match : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.activity_match, container, false)
+        val view = inflater.inflate(R.layout.fragment_match, container, false)
         recycleView = view.findViewById(R.id.match_recycleView)
         val matchAdaptator = MatchAdaptator(matches)
         recycleView.layoutManager = LinearLayoutManager(inflater.context)
