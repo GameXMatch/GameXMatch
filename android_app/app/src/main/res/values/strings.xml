@@ -9,4 +9,5 @@
     <string name="swipe_left_button">X</string>
     <string name="swipe_right_button">V</string>
     <string name="match_title">Vos conversations</string>
+    <string name="chat_debug_text">Nope, it\'s not working</string>
 </resources>

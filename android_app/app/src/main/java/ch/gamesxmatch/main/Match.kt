@@ -27,9 +27,6 @@ class Match : Fragment() {
         recycleView.layoutManager = LinearLayoutManager(inflater.context)
         recycleView.adapter = matchAdaptator
 
-        matchAdaptator.onItemClick = {
-            // TODO : Switch the fragment to chat
-        }
 
         return view
     }

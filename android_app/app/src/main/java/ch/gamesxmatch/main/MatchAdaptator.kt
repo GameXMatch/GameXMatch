@@ -1,5 +1,6 @@
 package ch.gamesxmatch.main
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,8 +32,18 @@ class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<Mat
         var imgAvatar :  ImageView = itemView.findViewById(R.id.match_avatar)
         var imgNotification : ImageView = itemView.findViewById(R.id.match_new_message)
         init {
+            openChatOnClickListener(itemView)
+        }
+
+        private fun openChatOnClickListener(itemView: View) {
             itemView.setOnClickListener {
                 onItemClick?.invoke(matches[adapterPosition])
+                val intent = Intent(itemView.context, Chat::class.java)
+
+                // TODO : pass the necessary data for the chat
+                intent.putExtra("matchID", adapterPosition.toString())
+
+                itemView.context.startActivities(arrayOf(intent))
             }
         }
     }
@@ -40,5 +51,7 @@ class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<Mat
     private fun bindValues(data : String, holder : ViewHolder) {
         holder.txtNickname.setText(data)
     }
+
+
 
 }
