@@ -28,7 +28,7 @@ class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<Mat
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var txtNickname : TextView = itemView.findViewById(R.id.match_nickname)
+        var txtNickname : TextView = itemView.findViewById(R.id.message_message)
         var imgAvatar :  ImageView = itemView.findViewById(R.id.match_avatar)
         var imgNotification : ImageView = itemView.findViewById(R.id.match_new_message)
         init {
