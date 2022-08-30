@@ -19,4 +19,7 @@
     <string name="profile_user_description_label">À propos de moi</string>
     <string name="profile_description_button">edit description</string>
     <string name="profile_descrption_editext">Je cherche des mates pour du gaming hardcore. Tellement hardcore qu\'on sue</string>
+    <string name="matchProfile_name">Nom d\'utilisateur</string>
+    <string name="matchProfile_description">Je cherche des mates pour du gaming hardcore. Tellement hardcore qu\'on sue</string>
+    <string name="matchprofile_button">return button</string>
 </resources>
