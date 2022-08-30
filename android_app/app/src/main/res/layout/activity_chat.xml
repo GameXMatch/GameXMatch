@@ -33,7 +33,7 @@
                 app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
             <TextView
-                android:id="@+id/chat_debug_text"
+                android:id="@+id/chat_matchName_text"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="8"

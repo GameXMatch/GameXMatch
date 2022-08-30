@@ -1,7 +1,7 @@
 package ch.gamesxmatch.main
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.authentication.Login
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -16,7 +17,7 @@ class Chat : AppCompatActivity() {
 
     // TODO : Get the chat data
     // TODO : Implement the firebase chat like app
-    lateinit var debug_text : TextView
+    lateinit var matchNameText : TextView
     lateinit var recyclerView: RecyclerView
     lateinit var returnButton: ImageButton
     lateinit var sendButton: ImageButton
@@ -33,9 +34,8 @@ class Chat : AppCompatActivity() {
 
     private fun initComponents(){
         setContentView(R.layout.activity_chat)
-        debug_text = findViewById(R.id.chat_debug_text)
-        messageEditText = findViewById(R.id.chat_editText_message)
         recyclerView = findViewById(R.id.chat_recyclerView)
+        initProfileInfo()
         setRetunButton()
         setSendButton()
 
@@ -46,7 +46,7 @@ class Chat : AppCompatActivity() {
         val extras = intent.extras
         if (extras != null) {
             val value = extras.getString("matchID")
-            debug_text.setText(value)
+            matchNameText.setText(value)
         }
 
         // TODO : Get messages and all the needed data
@@ -71,6 +71,24 @@ class Chat : AppCompatActivity() {
             val message = messageEditText.text.toString()
             sendMessage(message)
         }
+    }
+
+    private fun initProfileInfo(){
+        matchNameText = findViewById(R.id.chat_matchName_text)
+        messageEditText = findViewById(R.id.chat_editText_message)
+        matchNameText.setOnClickListener{
+            redirectToProfile()
+        }
+        messageEditText.setOnClickListener{
+            redirectToProfile()
+        }
+    }
+
+    private fun redirectToProfile(){
+        // TODO
+        //val intent = Intent(this, Profile::class.java)
+        //startActivity(intent)
+        println("clicked")
     }
 
     private fun sendMessage(message : String){
