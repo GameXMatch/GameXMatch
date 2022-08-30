@@ -21,9 +21,22 @@ class MatchProfile: AppCompatActivity() {
         userImageImageView = findViewById(R.id.matchprofile_profilePicture_imageView)
         returnButton = findViewById(R.id.matchProfile_return_button)
 
+        getMatchData()
+
         returnButton.setOnClickListener{
             finish()
         }
+    }
+
+    private fun getMatchData(){
+        // Data from the match activity
+        val extras = intent.extras
+        if (extras != null) {
+            val value = extras.getString("matchID")
+            usernameTextView.setText(value)
+        }
+
+        // TODO : Get messages and all the needed data
     }
 
 }
