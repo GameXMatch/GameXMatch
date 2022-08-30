@@ -10,4 +10,7 @@
     <string name="swipe_right_button">V</string>
     <string name="match_title">Vos conversations</string>
     <string name="chat_debug_text">Nope, it\'s not working</string>
+    <string name="chat_return_button">return</string>
+    <string name="chat_send_button">send</string>
+    <string name="chat_default_editText_value">enter your message here</string>
 </resources>
