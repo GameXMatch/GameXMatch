@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:layout_marginEnd="20dp"
     android:layout_marginBottom="5dp"
     android:paddingTop="5dp"
     app:barrierMargin="5dp">
@@ -16,12 +15,6 @@
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <Space
-            android:id="@+id/message_left_space"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1" />
 
         <TextView
             android:id="@+id/message_message"
@@ -34,11 +27,6 @@
             android:textSize="20sp"
             tools:text="mortimaire" />
 
-        <Space
-            android:id="@+id/message_right_space"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
