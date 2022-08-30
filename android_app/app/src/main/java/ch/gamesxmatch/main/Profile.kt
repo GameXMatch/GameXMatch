@@ -37,8 +37,14 @@ class Profile: Fragment() {
         userNameEditText = view.findViewById(R.id.profile_username_editText)
         userNameEditText.isEnabled = false
         nameButton = view.findViewById(R.id.profile_nameEdit_imageButton)
+
         nameButton.setOnClickListener{
             userNameEditText.isEnabled = !userNameEditText.isEnabled
+            if(userNameEditText.isEnabled){
+                nameButton.setImageResource(android.R.drawable.ic_media_play)
+            } else {
+                nameButton.setImageResource(android.R.drawable.ic_menu_edit)
+            }
         }
     }
 
@@ -48,6 +54,13 @@ class Profile: Fragment() {
         descriptionButton = view.findViewById(R.id.profile_description_imageButton)
         descriptionButton.setOnClickListener{
             descriptionEditText.isEnabled = !descriptionEditText.isEnabled
+            if(descriptionEditText.isEnabled){
+                descriptionButton.setImageResource(android.R.drawable.ic_media_play)
+            } else {
+                descriptionButton.setImageResource(android.R.drawable.ic_menu_edit)
+            }
         }
     }
+
+
 }
