@@ -11,7 +11,6 @@ class Landing : AppCompatActivity() {
 
     // TODO : Check for credentials
     // TODO : Nice text
-
     private lateinit var loginButton : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

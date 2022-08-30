@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "613414393598",
+    "firebase_url": "https://gamexmatch-56b69-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "gamexmatch-56b69",
+    "storage_bucket": "gamexmatch-56b69.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613414393598:android:d2fedaddce0d7dee89b7af",
+        "android_client_info": {
+          "package_name": "ch.gamesxmatch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613414393598-n7al6ofdr6bstp72seppou3am1jgl1of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFRmxWuA5V1p3IcbhQyhueWFWgp-22Erk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613414393598-n7al6ofdr6bstp72seppou3am1jgl1of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613414393598:android:91e542b05d505a0289b7af",
+        "android_client_info": {
+          "package_name": "com.example.firestoreexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613414393598-n7al6ofdr6bstp72seppou3am1jgl1of.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFRmxWuA5V1p3IcbhQyhueWFWgp-22Erk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "613414393598-n7al6ofdr6bstp72seppou3am1jgl1of.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
