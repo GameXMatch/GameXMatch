@@ -16,6 +16,8 @@ class ChatAdaptator(val messages : ArrayList<String>) : RecyclerView.Adapter<Cha
         const val message_weight = 5
         const val space_weight = 1
         const val space_disabled_weight = 0
+        const val background_sender = "#add8e6"
+        const val background_receiver = "#A4C639"
     }
 
     override fun getItemCount(): Int {
