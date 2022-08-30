@@ -80,6 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="25dp"
                 android:layout_weight="0"
+                android:contentDescription="@string/profile_edit_name_button"
                 app:srcCompat="@android:drawable/ic_menu_edit" />
         </LinearLayout>
 
@@ -92,14 +93,9 @@
             android:layout_marginEnd="10dp"
             android:ems="10"
             android:gravity="start|top"
-            android:inputType="textMultiLine" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textSize="24sp" />
+            android:inputType="textMultiLine"
+            android:minHeight="48dp"
+            android:text="@string/profile_descrption_editext" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

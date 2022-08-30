@@ -52,6 +52,8 @@ class Profile: Fragment() {
         descriptionEditText = view.findViewById(R.id.profile_description_editText)
         descriptionEditText.isEnabled = false
         descriptionButton = view.findViewById(R.id.profile_description_imageButton)
+
+
         descriptionButton.setOnClickListener{
             descriptionEditText.isEnabled = !descriptionEditText.isEnabled
             if(descriptionEditText.isEnabled){
@@ -62,5 +64,14 @@ class Profile: Fragment() {
         }
     }
 
+    private fun updateUsername() {
+        val username = userNameEditText.text.toString()
+        // TODO : send request
+    }
+
+    private fun updateDescription() {
+        val description = descriptionEditText.text.toString()
+        // TODO : send request
+    }
 
 }
