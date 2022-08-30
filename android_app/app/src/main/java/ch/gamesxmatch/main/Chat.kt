@@ -86,8 +86,9 @@ class Chat : AppCompatActivity() {
 
     private fun redirectToProfile(){
         // TODO
-        //val intent = Intent(this, Profile::class.java)
-        //startActivity(intent)
+        val intent = Intent(this, MatchProfile::class.java)
+        intent.putExtra("matchID", matchNameText.text)
+        startActivity(intent)
         println("clicked")
     }
 

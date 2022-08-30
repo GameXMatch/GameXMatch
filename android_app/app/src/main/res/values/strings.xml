@@ -13,4 +13,13 @@
     <string name="chat_return_button">return</string>
     <string name="chat_send_button">send</string>
     <string name="chat_default_editText_value">enter your message here</string>
+    <string name="profile_title">Votre Profile</string>
+    <string name="profile_edit_name_button">edit name</string>
+    <string name="profile_editname">Nom d\'utilisateur</string>
+    <string name="profile_user_description_label">À propos de moi</string>
+    <string name="profile_description_button">edit description</string>
+    <string name="profile_descrption_editext">Je cherche des mates pour du gaming hardcore. Tellement hardcore qu\'on sue</string>
+    <string name="matchProfile_name">Nom d\'utilisateur</string>
+    <string name="matchProfile_description">Je cherche des mates pour du gaming hardcore. Tellement hardcore qu\'on sue</string>
+    <string name="matchprofile_button">return button</string>
 </resources>

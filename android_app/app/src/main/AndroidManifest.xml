@@ -31,6 +31,9 @@
         <activity
             android:name=".main.CoreApp">
         </activity>
+        <activity
+            android:name=".main.MatchProfile">
+        </activity>
     </application>
 
 </manifest>
