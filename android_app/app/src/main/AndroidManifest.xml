@@ -14,15 +14,22 @@
         android:theme="@style/Theme.GamesXMatch"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".authentication.Landing"
             android:exported="true"
-            android:label="@string/app_name"
             android:theme="@style/Theme.GamesXMatch.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".authentication.Login">
+        </activity>
+        <activity
+            android:name=".main.Chat">
+        </activity>
+        <activity
+            android:name=".main.CoreApp">
         </activity>
     </application>
 
