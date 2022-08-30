@@ -21,7 +21,7 @@
                 android:id="@+id/chat_imageButton_back"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_weight="3"
                 android:contentDescription="@string/chat_return_button"
                 app:srcCompat="?attr/actionModeCloseDrawable" />
 
@@ -35,14 +35,11 @@
             <TextView
                 android:id="@+id/chat_debug_text"
                 android:layout_width="0dp"
-                android:layout_weight="10"
                 android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:gravity="center|left"
                 android:text="@string/chat_debug_text" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="8" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -66,7 +63,7 @@
                 android:text="@string/chat_default_editText_value" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/chat_send_imagebutton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
