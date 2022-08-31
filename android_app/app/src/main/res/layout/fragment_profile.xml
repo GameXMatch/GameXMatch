@@ -66,7 +66,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/profileMatch_username_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
@@ -97,11 +97,26 @@
             android:minHeight="48dp"
             android:text="@string/profile_descrption_editext" />
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/fragmentContainerView3"
-            android:name="ch.gamesxmatch.main.GameList"
+        <TextView
+            android:id="@+id/profile_game_list_txtView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/profile_game_list_label"
+            android:textSize="24sp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profile_game_list_recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Spinner
+            android:id="@+id/profile_game_selection_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/profile_game_spinner"
+            android:minHeight="48dp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
