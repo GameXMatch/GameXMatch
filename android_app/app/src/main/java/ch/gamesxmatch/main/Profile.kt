@@ -4,17 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Spinner
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import java.util.*
-import java.util.zip.Inflater
-import kotlin.collections.ArrayList
+
 
 class Profile: Fragment() {
 
@@ -40,7 +36,25 @@ class Profile: Fragment() {
         initUsernameViews(view)
         initDescriptionViews(view)
         initGameList(view, inflater)
+        initSpinner(view, inflater)
+    }
+
+    private fun initSpinner(view: View, inflater: LayoutInflater){
         gameSelectSpinner = view.findViewById(R.id.profile_game_selection_spinner)
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            inflater.context,
+            android.R.layout.simple_spinner_item, games
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        gameSelectSpinner.setAdapter(adapter)
+
+        gameSelectSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
+                addGame(adapterView.selectedItemPosition)
+            }
+
+            override fun onNothingSelected(arg0: AdapterView<*>?) {}
+        }
     }
 
     private fun initGameList(view : View, inflater: LayoutInflater){
@@ -82,6 +96,11 @@ class Profile: Fragment() {
             }
             descriptionEditText.isEnabled = !descriptionEditText.isEnabled
         }
+    }
+
+    private fun addGame(itemPosition : Int){
+        println(games[itemPosition])
+        // TODO
     }
 
     private fun updateUsername() {
