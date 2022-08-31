@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import java.util.zip.Inflater
 
@@ -16,7 +18,8 @@ class Profile: Fragment() {
     lateinit var descriptionButton: ImageButton
     lateinit var userNameEditText: EditText
     lateinit var descriptionEditText: EditText
-
+    lateinit var gameSelectSpinner: Spinner
+    lateinit var gameDisplayRecyclerView: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +34,9 @@ class Profile: Fragment() {
     private fun initViews(view : View) {
         initUsernameViews(view)
         initDescriptionViews(view)
+
+        gameSelectSpinner = view.findViewById(R.id.profile_game_selection_spinner)
+        gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
     }
 
     private fun initUsernameViews(view : View){

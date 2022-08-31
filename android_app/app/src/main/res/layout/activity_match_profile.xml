@@ -43,7 +43,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/profileMatch_username_textView"
+            android:id="@+id/matchProfile_username_textView"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="0"
@@ -59,14 +59,14 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/matchProfile_games_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/profile_game_list_label"
             android:textSize="24sp" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/profileMatch_game_list_recyclerView"
+            android:id="@+id/matchProfile_game_list_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
