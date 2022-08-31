@@ -1,40 +1,6 @@
 package ch.gamesxmatch.authentication
 
-/*import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import ch.gamesxmatch.R
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.GoogleApiClient
-import com.google.firebase.auth.FirebaseAuth
 
-class Login : AppCompatActivity() {
-
-    // TODO : Do everything
-
-    //added by Yanik. I have no idea what I'm doing X)
-    /*lateinit var mGoogleSignInClient: GoogleSignInClient
-
-    val Req_Code:Int=123
-    val firebaseAuth= FirebaseAuth.getInstance()*/
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
-
-        //added by Yanik. I have no idea what I'm doing X)
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .build();
-        val mGoogleApiClient = GoogleApiClient.Builder(this)
-            .enableAutoManage(this, this)
-            .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-            .build();
-
-    }
-}*/
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
