@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/component_game_imageView"
+        android:id="@+id/game_imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="2dp"
@@ -15,10 +15,10 @@
         app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/game_name"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="@string/component_game_label"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/component_game_imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/game_imageView" />
 </androidx.constraintlayout.widget.ConstraintLayout>
