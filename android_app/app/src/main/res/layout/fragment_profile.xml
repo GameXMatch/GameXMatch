@@ -97,5 +97,11 @@
             android:minHeight="48dp"
             android:text="@string/profile_descrption_editext" />
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView3"
+            android:name="ch.gamesxmatch.main.GameList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

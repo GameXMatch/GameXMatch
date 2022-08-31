@@ -58,5 +58,11 @@
             android:text="@string/matchProfile_description"
             android:textSize="20sp" />
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragmentContainerView2"
+            android:name="ch.gamesxmatch.main.GameList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
