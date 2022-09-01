@@ -1,5 +1,6 @@
 package ch.gamesxmatch.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.authentication.Login
 import java.util.*
 
 
@@ -18,7 +20,7 @@ class Profile: Fragment() {
     lateinit var descriptionButton: ImageButton
     lateinit var userNameEditText: EditText
     lateinit var descriptionEditText: EditText
-    lateinit var gameSelectSpinner: Spinner
+    lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
     val games = ArrayList<String>(Arrays.asList("test1", "test2", "test3", "test4", "test5"))
 
@@ -36,26 +38,13 @@ class Profile: Fragment() {
         initUsernameViews(view)
         initDescriptionViews(view)
         initGameList(view, inflater)
-        initSpinner(view, inflater)
-    }
-
-    private fun initSpinner(view: View, inflater: LayoutInflater){
-        gameSelectSpinner = view.findViewById(R.id.profile_game_selection_spinner)
-        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
-            inflater.context,
-            android.R.layout.simple_spinner_item, games
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        gameSelectSpinner.setAdapter(adapter)
-
-        gameSelectSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
-                addGame(adapterView.selectedItemPosition)
-            }
-
-            override fun onNothingSelected(arg0: AdapterView<*>?) {}
+        gameSelectButton = view.findViewById(R.id.profile_button_addGame)
+        gameSelectButton.setOnClickListener{
+            val intent = Intent(inflater.context, GameSelect::class.java)
+            startActivity(intent)
         }
     }
+
 
     private fun initGameList(view : View, inflater: LayoutInflater){
         gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)

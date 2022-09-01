@@ -29,6 +29,7 @@
         <activity android:name=".main.Chat"></activity>
         <activity android:name=".main.CoreApp"></activity>
         <activity android:name=".main.MatchProfile"></activity>
+        <activity android:name=".main.GameSelect"></activity>
     </application>
 
 </manifest>

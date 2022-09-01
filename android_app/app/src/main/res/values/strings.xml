@@ -24,6 +24,6 @@
     <string name="matchprofile_button">return button</string>
     <string name="component_game_label">GAME NAME</string>
     <string name="profile_game_list_label">Interested Games</string>
-    <string name="profile_game_spinner">Add games</string>
-    <string name="profile_game_spinner_label">Add games</string>
+    <string name="profile_game_add_button_label">Add games</string>
+    <string name="game_select_label">Select your games</string>
 </resources>
