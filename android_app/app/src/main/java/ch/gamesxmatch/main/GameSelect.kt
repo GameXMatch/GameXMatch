@@ -22,7 +22,7 @@ class GameSelect: AppCompatActivity() {
         setContentView(R.layout.activity_game_select)
         returnButton = findViewById(R.id.gameSelect_imageButton)
         gameListDisplay = findViewById(R.id.gameSelect_RecyclerView)
-        val gameListAdapter = GameListAdapter(games)
+        val gameListAdapter = GameListAdapter(games, true)
         gameListDisplay.layoutManager = GridLayoutManager(this, 3)
         gameListDisplay.adapter = gameListAdapter
 
