@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 
@@ -17,6 +18,7 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
     companion object {
         const val selectedColor = "#add8e6"
     }
+
     override fun getItemCount(): Int {
         return game.size
     }
@@ -33,7 +35,6 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
 
     open inner class ViewHolder(private val itemView: View, listener: Boolean) : RecyclerView.ViewHolder(itemView) {
         var message: TextView = itemView.findViewById(R.id.game_name)
-        val defaultColor = itemView.background
         init {
             if(listener) {
                 onGameClicked()
@@ -48,7 +49,7 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
         }
 
         private fun updateClickedGame() {
-            if(itemView.background != defaultColor){
+            if(itemView.background == null){
                 addGame()
             }
             else {
@@ -57,13 +58,13 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
         }
 
         private fun removeGame() {
-            itemView.background = defaultColor
-            println("ahoy")
+            itemView.background = null
+            // TODO REQUEST
         }
 
         private fun addGame() {
             itemView.setBackgroundColor(Color.parseColor(selectedColor))
-            println("ahoy 2")
+            // TODO REQUEST
         }
     }
 
