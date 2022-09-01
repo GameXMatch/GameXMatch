@@ -37,6 +37,7 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
         var message: TextView = itemView.findViewById(R.id.game_name)
         init {
             if(listener) {
+                updateData()
                 onGameClicked()
             }
         }
@@ -55,6 +56,18 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
             else {
                 removeGame()
             }
+        }
+
+        private fun updateData(){
+            // TODO UPDATE NAME AND IMAGE
+            if(isTheUserInterestedInGame()){
+                itemView.setBackgroundColor(Color.parseColor(selectedColor))
+            }
+        }
+
+        private fun isTheUserInterestedInGame() : Boolean{
+            // TODO
+            return false
         }
 
         private fun removeGame() {
