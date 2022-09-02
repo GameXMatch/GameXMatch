@@ -1,6 +1,7 @@
 package ch.gamesxmatch.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import ch.gamesxmatch.R
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.yuyakaido.android.cardstackview.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class Swipe : Fragment(), CardStackListener {
@@ -25,19 +33,68 @@ class Swipe : Fragment(), CardStackListener {
     lateinit var btnSwipeRight : Button
     lateinit var stack_view: CardStackView
 
-    var profiles = ArrayList<Profile>(arrayListOf(Profile(123,"test1","desc1", arrayListOf("asdasd", "vcbcvbcvb")),
-        Profile(234,"test2","desc2", arrayListOf("asdgfdgd", "dfg")),
-        Profile(456,"test3","desc3", arrayListOf("sdfghg", "vcvxvcbcvdgfdfabcvb"))))
+    lateinit var db: FirebaseFirestore
+
+    var profiles = ArrayList<Profile>(arrayListOf(Profile("DSAJHKDHSAKHD234423","test1","desc1", arrayListOf("asdasd", "vcbcvbcvb")),
+        Profile("HJJKHGUJ234KH","test2","desc2", arrayListOf("asdgfdgd", "dfg")),
+        Profile("SFDHJFSDJHHB1231","test3","desc3", arrayListOf("sdfghg", "vcvxvcbcvdgfdfabcvb"))))
 
     var adapter = SwipeAdapter(profiles)
     lateinit var layoutManager: CardStackLayoutManager
 
     data class Profile(
-        val uuid: Int,
+        val uuid: String,
         val name: String,
         val description: String,
         val games_images: ArrayList<String>
     )
+
+    /*
+        export async function getMatches(uid) {
+          const q = query(collection(db, "Users"), where("uid", "==", uid));
+
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach(async (doc) => {
+            let games = doc.get("games");
+
+            let q2 = query(
+              collection(db, "Users"),
+              where("games", "array-contains-any", games),
+              where("uid", "!=", "Heraciel")
+            );
+
+            let qs = await getDocs(q2);
+            qs.forEach((d2) => {
+              global.console.log(doc.id, " => ", d2.data());
+            });
+            // doc.data() is never undefined for query doc snapshots
+          });
+        }
+     */
+
+    fun getMatches(uid: String) {
+        /*
+        val games = db.collection("Users")
+            .whereEqualTo("uid", uid)
+            .get()
+            .addOnSuccessListener { result ->
+                val games = result.documents[0].data?.get("games")
+                db.collection("Users")
+                    .whereArrayContainsAny("games", listOf("test"))
+                    .whereNotEqualTo("uid", uid)
+                    .get()
+                    .addOnSuccessListener { result ->
+                        for (document in result) {
+                            Log.d("FIRETEST", document.data.toString())
+                        }
+                    }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("TAG", "get failed with ", exception)
+            }
+
+         */
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +110,9 @@ class Swipe : Fragment(), CardStackListener {
             setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
             setOverlayInterpolator(LinearInterpolator())
         }
+
+        db = Firebase.firestore
+        getMatches("Heraciel")
 
         stack_view.layoutManager = layoutManager
         stack_view.adapter = adapter
