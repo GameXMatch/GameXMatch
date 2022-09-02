@@ -86,6 +86,8 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
 
     private fun bindValues(index: Int, holder: ViewHolder) {
         holder.message.setText(games[index].name)
-        holder.image.setImageBitmap(games[index].image)
+        if(games[index].image != null) {
+            holder.image.setImageBitmap(games[index].image)
+        }
     }
 }

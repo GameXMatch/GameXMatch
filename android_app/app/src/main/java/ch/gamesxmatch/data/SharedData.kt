@@ -1,8 +1,7 @@
 package ch.gamesxmatch.data
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
+
 
 class SharedData private constructor() {
     companion object {
@@ -10,8 +9,8 @@ class SharedData private constructor() {
         private lateinit var instance: SharedData
 
         val games = ArrayList<Game>()
-        lateinit var user : Bitmap
-        val matches = HashMap<String, Bitmap>()
+        lateinit var user : User
+        val matches = ArrayList<User> ()
 
         fun getInstance(): SharedData {
             synchronized(this) {
@@ -24,7 +23,7 @@ class SharedData private constructor() {
 
     }
 
-    fun setGameImages(gameList : ArrayList<Game>){
+    fun setGames(gameList : ArrayList<Game>){
         games.addAll(gameList)
         for(game in games){
             game.convertStringToBitmap()
