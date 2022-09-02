@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.data.Images
+import ch.gamesxmatch.data.SharedData
 
 class MatchProfile: AppCompatActivity() {
     lateinit var usernameTextView: TextView
@@ -17,7 +17,7 @@ class MatchProfile: AppCompatActivity() {
     lateinit var userImageImageView: ImageView
     lateinit var returnButton: ImageButton
     lateinit var gameListRecyclerView: RecyclerView
-    val games = Images.getInstance()
+    val games = SharedData.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.data.Images
+import ch.gamesxmatch.data.SharedData
 
 
 class Profile: Fragment() {
@@ -24,7 +24,7 @@ class Profile: Fragment() {
     lateinit var descriptionEditText: EditText
     lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
-    val games = Images.getInstance()
+    val games = SharedData.getInstance()
     lateinit var gameListAdapter : GameListAdaptator
 
     override fun onCreateView(

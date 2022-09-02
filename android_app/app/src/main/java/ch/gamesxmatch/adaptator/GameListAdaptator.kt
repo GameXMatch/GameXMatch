@@ -9,18 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.Game
 
-open class GameListAdaptator(val games : HashMap<String, Bitmap>, private val listener: Boolean = false)
+open class GameListAdaptator(val games : ArrayList<Game>, private val listener: Boolean = false)
     : RecyclerView.Adapter<GameListAdaptator.ViewHolder>() {
 
-    var gameNames = ArrayList<String>()
-    var gameImages = ArrayList<Bitmap>()
-    init {
-        for((key, value) in games){
-            gameNames.add(key)
-            gameImages.add(value)
-        }
-    }
 
     var onItemClick: ((String) -> Unit)? = null
 
@@ -29,7 +22,7 @@ open class GameListAdaptator(val games : HashMap<String, Bitmap>, private val li
     }
 
     override fun getItemCount(): Int {
-        return gameNames.size
+        return games.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -54,7 +47,7 @@ open class GameListAdaptator(val games : HashMap<String, Bitmap>, private val li
 
         private fun onGameClicked() {
             itemView.setOnClickListener {
-                onItemClick?.invoke(gameNames[adapterPosition])
+                onItemClick?.invoke(games[adapterPosition].id)
                 updateClickedGame()
             }
         }
@@ -92,7 +85,7 @@ open class GameListAdaptator(val games : HashMap<String, Bitmap>, private val li
     }
 
     private fun bindValues(index: Int, holder: ViewHolder) {
-        holder.message.setText(gameNames[index])
-        holder.image.setImageBitmap(gameImages[index])
+        holder.message.setText(games[index].name)
+        holder.image.setImageBitmap(games[index].image)
     }
 }

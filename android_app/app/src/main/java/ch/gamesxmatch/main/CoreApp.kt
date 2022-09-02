@@ -5,7 +5,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ch.gamesxmatch.R
-import ch.gamesxmatch.data.Images
+import ch.gamesxmatch.data.SharedData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,7 +16,7 @@ class CoreApp : AppCompatActivity() {
     lateinit var btnSwipe : Button
     lateinit var btnProfile : Button
     val fragmentID = R.id.fragmentContainerView
-    val images = Images.getInstance()
+    val images = SharedData.getInstance()
 
     val matchFragment = Match()
     val swipeFragment = Swipe()
