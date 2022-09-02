@@ -49,38 +49,15 @@ class Swipe : Fragment(), CardStackListener {
         val games_images: ArrayList<String>
     )
 
-    /*
-        export async function getMatches(uid) {
-          const q = query(collection(db, "Users"), where("uid", "==", uid));
-
-          const querySnapshot = await getDocs(q);
-          querySnapshot.forEach(async (doc) => {
-            let games = doc.get("games");
-
-            let q2 = query(
-              collection(db, "Users"),
-              where("games", "array-contains-any", games),
-              where("uid", "!=", "Heraciel")
-            );
-
-            let qs = await getDocs(q2);
-            qs.forEach((d2) => {
-              global.console.log(doc.id, " => ", d2.data());
-            });
-            // doc.data() is never undefined for query doc snapshots
-          });
-        }
-     */
-
     fun getMatches(uid: String) {
-        /*
         val games = db.collection("Users")
             .whereEqualTo("uid", uid)
             .get()
             .addOnSuccessListener { result ->
-                val games = result.documents[0].data?.get("games")
+                val games = result.documents[0].data?.get("games") as ArrayList<DocumentReference>
+
                 db.collection("Users")
-                    .whereArrayContainsAny("games", listOf("test"))
+                    .whereArrayContainsAny("games", games)
                     .whereNotEqualTo("uid", uid)
                     .get()
                     .addOnSuccessListener { result ->
@@ -92,8 +69,6 @@ class Swipe : Fragment(), CardStackListener {
             .addOnFailureListener { exception ->
                 Log.d("TAG", "get failed with ", exception)
             }
-
-         */
     }
 
     override fun onCreateView(
