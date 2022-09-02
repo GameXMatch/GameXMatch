@@ -4,16 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.Button
-import android.widget.StackView
-import androidx.cardview.widget.CardView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import com.yuyakaido.android.cardstackview.*
+
 
 class Swipe : Fragment(), CardStackListener {
 
@@ -50,7 +49,7 @@ class Swipe : Fragment(), CardStackListener {
         btnSwipeRight = view.findViewById(R.id.swipe_right_button)
         stack_view = view.findViewById(R.id.stack_view_id)
 
-        layoutManager = CardStackLayoutManager(context).apply {
+        layoutManager = CardStackLayoutManager(this.context, this).apply {
             setSwipeableMethod(SwipeableMethod.AutomaticAndManual)
             setOverlayInterpolator(LinearInterpolator())
         }
@@ -63,30 +62,45 @@ class Swipe : Fragment(), CardStackListener {
             }
         }
 
+        btnSwipeLeft.setOnClickListener {
+            val setting = SwipeAnimationSetting.Builder()
+                .setDirection(Direction.Left)
+                .setDuration(200)
+                .setInterpolator(AccelerateInterpolator())
+                .build()
+            layoutManager.setSwipeAnimationSetting(setting)
+            stack_view.swipe()
+        }
+
+        btnSwipeRight.setOnClickListener {
+            val setting = SwipeAnimationSetting.Builder()
+                .setDirection(Direction.Right)
+                .setDuration(200)
+                .setInterpolator(AccelerateInterpolator())
+                .build()
+            layoutManager.setSwipeAnimationSetting(setting)
+            stack_view.swipe()
+        }
+
         return view
     }
 
     override fun onCardDragging(direction: Direction?, ratio: Float) {
-        TODO("Not yet implemented")
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        TODO("Not yet implemented")
+        Toast.makeText(this.getContext(), if (direction == Direction.Left) "Left" else "Right"  ,Toast.LENGTH_LONG).show();
     }
 
     override fun onCardRewound() {
-        TODO("Not yet implemented")
     }
 
     override fun onCardCanceled() {
-        TODO("Not yet implemented")
     }
 
     override fun onCardAppeared(view: View?, position: Int) {
-        TODO("Not yet implemented")
     }
 
     override fun onCardDisappeared(view: View?, position: Int) {
-        TODO("Not yet implemented")
     }
 }
