@@ -17,7 +17,8 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
     : RecyclerView.Adapter<GameListAdaptator.ViewHolder>() {
 
     var sharedData = SharedData.getInstance()
-    var userGames = sharedData.getMainUser().gamesUIDs
+    var mainUser = sharedData.getMainUser()
+    var userGames = mainUser.gamesUIDs
     var onItemClick: ((String) -> Unit)? = null
 
     companion object {
@@ -67,11 +68,13 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
 
         private fun removeGame() {
             layout.background = null
+            mainUser.removeGame(uuid.text.toString())
             // TODO REQUEST
         }
 
         private fun addGame() {
             layout.setBackgroundColor(Color.parseColor(selectedColor))
+            mainUser.addGame(uuid.text.toString())
             // TODO REQUEST
         }
     }

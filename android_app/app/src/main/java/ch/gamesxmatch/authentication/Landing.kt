@@ -82,7 +82,7 @@ class Landing : AppCompatActivity() {
 
                     val games = document.data?.get("games") as ArrayList<DocumentReference>
                     for(game in games){
-                        user.gamesUIDs.add(game.path)
+                        user.gamesUIDs.add(game.path.toString().substringAfter("Games/"))
                     }
 
                     val likes = document.data?.get("games") as ArrayList<DocumentReference>

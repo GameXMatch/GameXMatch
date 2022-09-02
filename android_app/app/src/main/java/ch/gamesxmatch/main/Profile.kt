@@ -40,6 +40,7 @@ class Profile: Fragment() {
         return view
     }
 
+
     private fun initViews(view : View, inflater: LayoutInflater) {
         initUsernameViews(view)
         initDescriptionViews(view)
