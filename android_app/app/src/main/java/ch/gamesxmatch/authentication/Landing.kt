@@ -30,7 +30,7 @@ class Landing : AppCompatActivity() {
 
     fun checkLoggedInt() : Boolean {
         // TODO
-        return false
+        return true
     }
 
 

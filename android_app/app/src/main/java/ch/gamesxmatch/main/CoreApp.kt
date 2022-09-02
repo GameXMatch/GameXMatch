@@ -5,16 +5,23 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ch.gamesxmatch.R
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
 
 class CoreApp : AppCompatActivity() {
     lateinit var btnMatch : Button
     lateinit var btnSwipe : Button
     lateinit var btnProfile : Button
     val fragmentID = R.id.fragmentContainerView
+    val images = Images.getInstance()
 
     val matchFragment = Match()
     val swipeFragment = Swipe()
     val profileFragment = Profile()
+
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +32,25 @@ class CoreApp : AppCompatActivity() {
         btnProfile = findViewById(R.id.core_profile_button)
 
         switchFragmentAndDisableButtons(btnProfile, profileFragment)
-
+        db = Firebase.firestore
         initButtonListeners()
+        initGamesFolder()
+    }
+
+    fun initGamesFolder() {
+        val imagesLink = HashMap<String, String>()
+        db.collection("Games")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    println("${document.id} => ${document.data}")
+                    imagesLink.set(document.data.get("name").toString(), document.data.get("imageURL").toString())
+                }
+            }
+            .addOnFailureListener { exception ->
+                println("Error getting documents: $exception")
+            }
+        Thread { images.setGameImages(imagesLink) }.start()
     }
 
     fun initButtonListeners(){
