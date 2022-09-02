@@ -15,14 +15,14 @@ class GameSelect: AppCompatActivity() {
 
     lateinit var returnButton : ImageButton
     lateinit var gameListDisplay : RecyclerView
-    val games = ArrayList<String>(Arrays.asList("test1", "test2", "test3", "test4", "test5"))
+    val games = Images.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_select)
         returnButton = findViewById(R.id.gameSelect_imageButton)
         gameListDisplay = findViewById(R.id.gameSelect_RecyclerView)
-        val gameListAdapter = GameListAdapter(games, true)
+        val gameListAdapter = GameListAdapter(games.getGames(), true)
         gameListDisplay.layoutManager = GridLayoutManager(this, 3)
         gameListDisplay.adapter = gameListAdapter
 

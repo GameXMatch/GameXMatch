@@ -17,7 +17,7 @@ class MatchProfile: AppCompatActivity() {
     lateinit var userImageImageView: ImageView
     lateinit var returnButton: ImageButton
     lateinit var gameListRecyclerView: RecyclerView
-    val games = ArrayList<String>(Arrays.asList("test1", "test2", "test3", "test4", "test5"))
+    val games = Images.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class MatchProfile: AppCompatActivity() {
         returnButton = findViewById(R.id.matchProfile_return_button)
         gameListRecyclerView = findViewById(R.id.matchProfile_game_list_recyclerView)
 
-        val gameListAdapter = GameListAdapter(games)
+        val gameListAdapter = GameListAdapter(games.getGames())
         gameListRecyclerView.layoutManager = GridLayoutManager(this, 3)
         gameListRecyclerView.adapter = gameListAdapter
 

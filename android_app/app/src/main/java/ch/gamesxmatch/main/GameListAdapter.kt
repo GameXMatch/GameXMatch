@@ -1,17 +1,28 @@
 package ch.gamesxmatch.main
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.ColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 
-open class GameListAdapter(val game : ArrayList<String>, private val listener: Boolean = false)
+open class GameListAdapter(val games : HashMap<String, Bitmap>, private val listener: Boolean = false)
     : RecyclerView.Adapter<GameListAdapter.ViewHolder>() {
+
+    var gameNames = ArrayList<String>()
+    var gameImages = ArrayList<Bitmap>()
+    init {
+        for((key, value) in games){
+            gameNames.add(key)
+            gameImages.add(value)
+        }
+    }
 
     var onItemClick: ((String) -> Unit)? = null
 
@@ -20,7 +31,7 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
     }
 
     override fun getItemCount(): Int {
-        return game.size
+        return gameNames.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,11 +41,12 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        bindValues(game[position], holder)
+        bindValues(position, holder)
     }
 
     open inner class ViewHolder(private val itemView: View, listener: Boolean) : RecyclerView.ViewHolder(itemView) {
         var message: TextView = itemView.findViewById(R.id.game_name)
+        var image : ImageView = itemView.findViewById(R.id.game_imageView)
         init {
             if(listener) {
                 updateData()
@@ -44,7 +56,7 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
 
         private fun onGameClicked() {
             itemView.setOnClickListener {
-                onItemClick?.invoke(game[adapterPosition])
+                onItemClick?.invoke(gameNames[adapterPosition])
                 updateClickedGame()
             }
         }
@@ -81,7 +93,8 @@ open class GameListAdapter(val game : ArrayList<String>, private val listener: B
         }
     }
 
-    private fun bindValues(data: String, holder: ViewHolder) {
-        holder.message.setText(data)
+    private fun bindValues(index: Int, holder: ViewHolder) {
+        holder.message.setText(gameNames[index])
+        holder.image.setImageBitmap(gameImages[index])
     }
 }

@@ -6,15 +6,37 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import ch.gamesxmatch.R
 import ch.gamesxmatch.main.CoreApp
+import ch.gamesxmatch.main.Images
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class Landing : AppCompatActivity() {
 
+    private lateinit var db: FirebaseFirestore
+    var images = Images.getInstance()
     // TODO : Check for credentials
     // TODO : Nice text
     private lateinit var loginButton : Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(checkLoggedInt()){
+            db = Firebase.firestore
+            val imagesLink = HashMap<String, String>()
+            db.collection("Games")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        println("${document.id} => ${document.data}")
+                        imagesLink[document.data.get("name").toString()] =
+                            document.data.get("imageURL").toString()
+                    }
+                    images.setGameImages(imagesLink)
+                }
+                .addOnFailureListener { exception ->
+                    println("Error getting documents: $exception")
+                }
+
             val intent = Intent(this, CoreApp::class.java)
             startActivity(intent)
             finish()

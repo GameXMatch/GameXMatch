@@ -34,24 +34,9 @@ class CoreApp : AppCompatActivity() {
         switchFragmentAndDisableButtons(btnProfile, profileFragment)
         db = Firebase.firestore
         initButtonListeners()
-        initGamesFolder()
+        //initGamesFolder()
     }
 
-    fun initGamesFolder() {
-        val imagesLink = HashMap<String, String>()
-        db.collection("Games")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    println("${document.id} => ${document.data}")
-                    imagesLink.set(document.data.get("name").toString(), document.data.get("imageURL").toString())
-                }
-            }
-            .addOnFailureListener { exception ->
-                println("Error getting documents: $exception")
-            }
-        Thread { images.setGameImages(imagesLink) }.start()
-    }
 
     fun initButtonListeners(){
         btnMatch.setOnClickListener{

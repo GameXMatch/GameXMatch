@@ -2,7 +2,7 @@ package ch.gamesxmatch.main
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import java.net.URL
+import android.util.Base64
 
 class Images private constructor() {
     companion object {
@@ -26,10 +26,24 @@ class Images private constructor() {
 
     fun setGameImages(links : HashMap<String, String>){
         for((key, value) in links) {
-            val url = URL(value)
-            val bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream())
-            gameImages.put(key, bmp)
+            println(value)
+            val decodedString: ByteArray = Base64.decode(value, Base64.URL_SAFE)
+            val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
+            gameImages.put(key, decodedByte)
+            println("test")
         }
+    }
+
+    fun getAllGames() : ArrayList<Bitmap>{
+        val games = ArrayList<Bitmap>()
+        for((key, value) in gameImages){
+            games.add(value)
+        }
+        return games
+    }
+
+    fun getGames() : HashMap<String, Bitmap> {
+        return gameImages
     }
 
 }

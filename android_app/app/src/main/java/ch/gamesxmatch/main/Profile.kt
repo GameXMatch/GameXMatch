@@ -22,7 +22,7 @@ class Profile: Fragment() {
     lateinit var descriptionEditText: EditText
     lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
-    val games = ArrayList<String>(Arrays.asList("test1", "test2", "test3", "test4", "test5"))
+    val games = Images.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +48,7 @@ class Profile: Fragment() {
 
     private fun initGameList(view : View, inflater: LayoutInflater){
         gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
-        val gameListAdapter = GameListAdapter(games)
+        val gameListAdapter = GameListAdapter(games.getGames())
         gameDisplayRecyclerView.layoutManager = GridLayoutManager(inflater.context, 3)
         gameDisplayRecyclerView.adapter = gameListAdapter
     }
@@ -88,7 +88,7 @@ class Profile: Fragment() {
     }
 
     private fun addGame(itemPosition : Int){
-        println(games[itemPosition])
+        //println(games[itemPosition])
         // TODO
     }
 
