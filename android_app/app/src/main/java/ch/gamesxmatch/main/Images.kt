@@ -27,7 +27,7 @@ class Images private constructor() {
     fun setGameImages(links : HashMap<String, String>){
         for((key, value) in links) {
             println(value)
-            val decodedString: ByteArray = Base64.decode(value, Base64.URL_SAFE)
+            val decodedString: ByteArray = Base64.decode(value, Base64.DEFAULT)
             val decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.size)
             gameImages.put(key, decodedByte)
             println("test")
