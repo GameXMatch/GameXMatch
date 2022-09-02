@@ -1,14 +1,20 @@
 package ch.gamesxmatch.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import java.util.zip.Inflater
+import ch.gamesxmatch.data.SharedData
+
 
 class Profile: Fragment() {
 
@@ -16,7 +22,10 @@ class Profile: Fragment() {
     lateinit var descriptionButton: ImageButton
     lateinit var userNameEditText: EditText
     lateinit var descriptionEditText: EditText
-
+    lateinit var gameSelectButton: Button
+    lateinit var gameDisplayRecyclerView: RecyclerView
+    val games = SharedData.getInstance()
+    lateinit var gameListAdapter : GameListAdaptator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,13 +33,28 @@ class Profile: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        initViews(view)
+        initViews(view, inflater)
         return view
     }
 
-    private fun initViews(view : View) {
+    private fun initViews(view : View, inflater: LayoutInflater) {
         initUsernameViews(view)
         initDescriptionViews(view)
+        initGameList(view, inflater)
+        gameSelectButton = view.findViewById(R.id.profile_button_addGame)
+        gameSelectButton.setOnClickListener{
+            val intent = Intent(inflater.context, GameSelect::class.java)
+            startActivity(intent)
+        }
+
+    }
+
+
+    private fun initGameList(view : View, inflater: LayoutInflater){
+        gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
+        gameListAdapter = GameListAdaptator(games.getGames())
+        gameDisplayRecyclerView.layoutManager = GridLayoutManager(inflater.context, 3)
+        gameDisplayRecyclerView.adapter = gameListAdapter
     }
 
     private fun initUsernameViews(view : View){
@@ -65,6 +89,11 @@ class Profile: Fragment() {
             }
             descriptionEditText.isEnabled = !descriptionEditText.isEnabled
         }
+    }
+
+    private fun addGame(itemPosition : Int){
+        //println(games[itemPosition])
+        // TODO
     }
 
     private fun updateUsername() {

@@ -8,8 +8,8 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ch.gamesxmatch.adaptator.ChatAdaptator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.authentication.Login
 import java.util.*
 import kotlin.collections.ArrayList
 
