@@ -7,9 +7,9 @@ class SharedData private constructor() {
     companion object {
         @Volatile
         private lateinit var instance: SharedData
-
+        val tempUUID = "dvBMyNwQHXSvcUrJw7Ak"
         val games = ArrayList<Game>()
-        lateinit var user : User
+        lateinit var mainUser : User
         val matches = ArrayList<User> ()
 
         fun getInstance(): SharedData {
@@ -33,5 +33,28 @@ class SharedData private constructor() {
     fun getGames() : ArrayList<Game> {
         return games
     }
+    fun getMainUserUUID() : String{
+        //return mainUser.uid
+        return tempUUID
+    }
 
+    fun setMainUser(user: User) {
+        mainUser = user
+    }
+
+    fun getMainUser() : User{
+        return mainUser
+    }
+
+    fun getInterestedGames(user : User) : ArrayList<Game> {
+        var userGames = ArrayList<Game> ()
+        for(game in games){
+            for(userGame in user.gamesUIDs){
+                if(userGame.contains(game.id)){
+                    userGames.add(game)
+                }
+            }
+        }
+        return userGames
+    }
 }

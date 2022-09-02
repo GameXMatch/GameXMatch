@@ -10,4 +10,5 @@ class User {
     val likes = ArrayList<String> ()
     val dislikes = ArrayList<String> ()
     var image : Bitmap? = null
+    var imageData : String = ""
 }
