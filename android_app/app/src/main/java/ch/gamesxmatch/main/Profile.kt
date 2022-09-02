@@ -5,13 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.authentication.Login
-import java.util.*
+import ch.gamesxmatch.data.Images
 
 
 class Profile: Fragment() {
@@ -23,6 +25,7 @@ class Profile: Fragment() {
     lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
     val games = Images.getInstance()
+    lateinit var gameListAdapter : GameListAdaptator
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,12 +46,13 @@ class Profile: Fragment() {
             val intent = Intent(inflater.context, GameSelect::class.java)
             startActivity(intent)
         }
+
     }
 
 
     private fun initGameList(view : View, inflater: LayoutInflater){
         gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
-        val gameListAdapter = GameListAdapter(games.getGames())
+        gameListAdapter = GameListAdaptator(games.getGames())
         gameDisplayRecyclerView.layoutManager = GridLayoutManager(inflater.context, 3)
         gameDisplayRecyclerView.adapter = gameListAdapter
     }

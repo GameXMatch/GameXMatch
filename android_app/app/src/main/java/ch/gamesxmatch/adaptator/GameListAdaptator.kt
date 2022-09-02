@@ -1,19 +1,17 @@
-package ch.gamesxmatch.main
+package ch.gamesxmatch.adaptator
 
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.ColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.view.menu.MenuView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 
-open class GameListAdapter(val games : HashMap<String, Bitmap>, private val listener: Boolean = false)
-    : RecyclerView.Adapter<GameListAdapter.ViewHolder>() {
+open class GameListAdaptator(val games : HashMap<String, Bitmap>, private val listener: Boolean = false)
+    : RecyclerView.Adapter<GameListAdaptator.ViewHolder>() {
 
     var gameNames = ArrayList<String>()
     var gameImages = ArrayList<Bitmap>()

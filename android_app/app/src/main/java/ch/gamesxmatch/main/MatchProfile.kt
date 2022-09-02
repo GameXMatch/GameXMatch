@@ -7,9 +7,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import java.util.*
-import kotlin.collections.ArrayList
+import ch.gamesxmatch.data.Images
 
 class MatchProfile: AppCompatActivity() {
     lateinit var usernameTextView: TextView
@@ -28,7 +28,7 @@ class MatchProfile: AppCompatActivity() {
         returnButton = findViewById(R.id.matchProfile_return_button)
         gameListRecyclerView = findViewById(R.id.matchProfile_game_list_recyclerView)
 
-        val gameListAdapter = GameListAdapter(games.getGames())
+        val gameListAdapter = GameListAdaptator(games.getGames())
         gameListRecyclerView.layoutManager = GridLayoutManager(this, 3)
         gameListRecyclerView.adapter = gameListAdapter
 

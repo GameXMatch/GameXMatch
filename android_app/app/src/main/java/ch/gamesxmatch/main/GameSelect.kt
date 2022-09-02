@@ -1,15 +1,13 @@
 package ch.gamesxmatch.main
 
 import android.os.Bundle
-import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import java.util.*
+import ch.gamesxmatch.data.Images
 
 class GameSelect: AppCompatActivity() {
 
@@ -22,7 +20,7 @@ class GameSelect: AppCompatActivity() {
         setContentView(R.layout.activity_game_select)
         returnButton = findViewById(R.id.gameSelect_imageButton)
         gameListDisplay = findViewById(R.id.gameSelect_RecyclerView)
-        val gameListAdapter = GameListAdapter(games.getGames(), true)
+        val gameListAdapter = GameListAdaptator(games.getGames(), true)
         gameListDisplay.layoutManager = GridLayoutManager(this, 3)
         gameListDisplay.adapter = gameListAdapter
 

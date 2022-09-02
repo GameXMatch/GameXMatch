@@ -1,14 +1,10 @@
-package ch.gamesxmatch.main
+package ch.gamesxmatch.adaptator
 
-import android.app.ActionBar
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.core.view.MarginLayoutParamsCompat
-import androidx.core.view.marginBottom
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 

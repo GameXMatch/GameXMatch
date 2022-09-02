@@ -5,6 +5,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.Images
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -34,7 +35,6 @@ class CoreApp : AppCompatActivity() {
         switchFragmentAndDisableButtons(btnProfile, profileFragment)
         db = Firebase.firestore
         initButtonListeners()
-        //initGamesFolder()
     }
 
 

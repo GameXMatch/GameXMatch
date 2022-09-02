@@ -1,10 +1,11 @@
-package ch.gamesxmatch.main
+package ch.gamesxmatch.data
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 
 class Images private constructor() {
+    var imagesTreated = false
     companion object {
         @Volatile
         private lateinit var instance: Images
@@ -15,7 +16,7 @@ class Images private constructor() {
 
         fun getInstance(): Images {
             synchronized(this) {
-                if (!::instance.isInitialized) {
+                if (!Companion::instance.isInitialized) {
                     instance = Images()
                 }
                 return instance
@@ -25,6 +26,7 @@ class Images private constructor() {
     }
 
     fun setGameImages(links : HashMap<String, String>){
+        imagesTreated = false
         for((key, value) in links) {
             println(value)
             val decodedString: ByteArray = Base64.decode(value, Base64.DEFAULT)
@@ -32,6 +34,7 @@ class Images private constructor() {
             gameImages.put(key, decodedByte)
             println("test")
         }
+        imagesTreated = true
     }
 
     fun getAllGames() : ArrayList<Bitmap>{
