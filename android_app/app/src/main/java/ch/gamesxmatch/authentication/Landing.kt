@@ -56,7 +56,7 @@ class Landing : AppCompatActivity() {
                     currentGame.name = document.data.get("name").toString()
                     supportedGames.add(currentGame)
                 }
-                sharedData.setGameImages(supportedGames)
+                sharedData.setGames(supportedGames)
             }
             .addOnFailureListener { exception ->
                 println("Error getting documents: $exception")
