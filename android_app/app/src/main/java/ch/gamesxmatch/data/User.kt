@@ -11,4 +11,10 @@ class User {
     val dislikes = ArrayList<String> ()
     var image : Bitmap? = null
     var imageData : String = ""
+
+    fun removeGame(game: Game) {
+        for (gameuuid in gamesUIDs) {
+
+        }
+    }
 }

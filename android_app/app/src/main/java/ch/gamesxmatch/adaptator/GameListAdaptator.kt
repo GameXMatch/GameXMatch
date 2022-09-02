@@ -6,15 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.Game
+import ch.gamesxmatch.data.SharedData
 
 open class GameListAdaptator(val games : ArrayList<Game>, private val listener: Boolean = false)
     : RecyclerView.Adapter<GameListAdaptator.ViewHolder>() {
 
-
+    var sharedData = SharedData.getInstance()
+    var userGames = sharedData.getMainUser().gamesUIDs
     var onItemClick: ((String) -> Unit)? = null
 
     companion object {
@@ -38,9 +41,10 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
     open inner class ViewHolder(private val itemView: View, listener: Boolean) : RecyclerView.ViewHolder(itemView) {
         var message: TextView = itemView.findViewById(R.id.game_name)
         var image : ImageView = itemView.findViewById(R.id.game_imageView)
+        var uuid : TextView = itemView.findViewById(R.id.game_uuid)
+        var layout : LinearLayout = itemView.findViewById(R.id.game_layout)
         init {
             if(listener) {
-                updateData()
                 onGameClicked()
             }
         }
@@ -53,7 +57,7 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
         }
 
         private fun updateClickedGame() {
-            if(itemView.background == null){
+            if(layout.background == null){
                 addGame()
             }
             else {
@@ -61,25 +65,13 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
             }
         }
 
-        private fun updateData(){
-            // TODO UPDATE NAME AND IMAGE
-            if(isTheUserInterestedInGame()){
-                itemView.setBackgroundColor(Color.parseColor(selectedColor))
-            }
-        }
-
-        private fun isTheUserInterestedInGame() : Boolean{
-            // TODO
-            return false
-        }
-
         private fun removeGame() {
-            itemView.background = null
+            layout.background = null
             // TODO REQUEST
         }
 
         private fun addGame() {
-            itemView.setBackgroundColor(Color.parseColor(selectedColor))
+            layout.setBackgroundColor(Color.parseColor(selectedColor))
             // TODO REQUEST
         }
     }
@@ -89,5 +81,22 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
         if(games[index].image != null) {
             holder.image.setImageBitmap(games[index].image)
         }
+        holder.uuid.setText(games[index].id)
+
+
+        if(isTheUserInterestedInGame(holder) && listener){
+            holder.layout.setBackgroundColor(Color.parseColor(selectedColor))
+        }
+    }
+
+    private fun isTheUserInterestedInGame(holder: ViewHolder) : Boolean{
+        val game = holder.uuid.text.toString()
+        for(userGame in userGames){
+            if(userGame.contains(game)){
+                return true
+            }
+        }
+
+        return false
     }
 }

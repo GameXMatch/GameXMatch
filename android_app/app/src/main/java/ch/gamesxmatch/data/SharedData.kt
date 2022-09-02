@@ -1,7 +1,5 @@
 package ch.gamesxmatch.data
 
-import android.graphics.Bitmap
-
 
 class SharedData private constructor() {
     companion object {
@@ -50,11 +48,15 @@ class SharedData private constructor() {
         var userGames = ArrayList<Game> ()
         for(game in games){
             for(userGame in user.gamesUIDs){
-                if(userGame.contains(game.id)){
+                if(gameUUIDisGame(userGame, game)){
                     userGames.add(game)
                 }
             }
         }
         return userGames
+    }
+
+    fun gameUUIDisGame(gameuuid : String, game: Game) : Boolean{
+        return gameuuid.contains(game.id)
     }
 }
