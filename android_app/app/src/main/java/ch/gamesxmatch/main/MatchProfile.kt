@@ -7,9 +7,9 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
-import java.util.*
-import kotlin.collections.ArrayList
+import ch.gamesxmatch.data.SharedData
 
 class MatchProfile: AppCompatActivity() {
     lateinit var usernameTextView: TextView
@@ -17,7 +17,7 @@ class MatchProfile: AppCompatActivity() {
     lateinit var userImageImageView: ImageView
     lateinit var returnButton: ImageButton
     lateinit var gameListRecyclerView: RecyclerView
-    val games = ArrayList<String>(Arrays.asList("test1", "test2", "test3", "test4", "test5"))
+    val games = SharedData.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,7 +28,7 @@ class MatchProfile: AppCompatActivity() {
         returnButton = findViewById(R.id.matchProfile_return_button)
         gameListRecyclerView = findViewById(R.id.matchProfile_game_list_recyclerView)
 
-        val gameListAdapter = GameListAdapter(games)
+        val gameListAdapter = GameListAdaptator(games.getGames())
         gameListRecyclerView.layoutManager = GridLayoutManager(this, 3)
         gameListRecyclerView.adapter = gameListAdapter
 
