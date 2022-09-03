@@ -12,22 +12,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import ch.gamesxmatch.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
+import ch.gamesxmatch.adaptator.SwipeAdapter
+import ch.gamesxmatch.data.SharedData
+import ch.gamesxmatch.data.User
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.yuyakaido.android.cardstackview.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 
 class Swipe : Fragment(), CardStackListener {
 
-    // TODO : Create data type for the match
-    // TODO : Find a way to display the data
-    // TODO : Implement the swipe logic and refresh of the card
-    // Maybe find something better than a Cardview?
+    // TODO : Implement refresh of the cards
+    // TODO : Use real uid of user
 
     lateinit var btnSwipeLeft : Button
     lateinit var btnSwipeRight : Button
@@ -35,39 +34,44 @@ class Swipe : Fragment(), CardStackListener {
 
     lateinit var db: FirebaseFirestore
 
-    var profiles = ArrayList<Profile>(arrayListOf(Profile("DSAJHKDHSAKHD234423","test1","desc1", arrayListOf("asdasd", "vcbcvbcvb")),
-        Profile("HJJKHGUJ234KH","test2","desc2", arrayListOf("asdgfdgd", "dfg")),
-        Profile("SFDHJFSDJHHB1231","test3","desc3", arrayListOf("sdfghg", "vcvxvcbcvdgfdfabcvb"))))
-
-    var adapter = SwipeAdapter(profiles)
+    lateinit var adapter : SwipeAdapter
     lateinit var layoutManager: CardStackLayoutManager
 
-    data class Profile(
-        val uuid: String,
-        val name: String,
-        val description: String,
-        val games_images: ArrayList<String>
-    )
-
     fun getMatches(uid: String) {
-        val games = db.collection("Users")
-            .whereEqualTo("uid", uid)
+        val tmp = ArrayList<User>()
+
+        db.collection("Users")
+            .document(uid)
             .get()
             .addOnSuccessListener { result ->
-                val games = result.documents[0].data?.get("games") as ArrayList<DocumentReference>
+                val games = result.data?.get("games") as ArrayList<DocumentReference>
 
                 db.collection("Users")
                     .whereArrayContainsAny("games", games)
-                    .whereNotEqualTo("uid", uid)
+                    .whereNotEqualTo(FieldPath.documentId(), uid)
                     .get()
                     .addOnSuccessListener { result ->
                         for (document in result) {
-                            Log.d("FIRETEST", document.data.toString())
+                            println(document.data)
+                            tmp.add(document.toObject<User>())
+
                         }
+                        adapter = SwipeAdapter(tmp)
+
+                        stack_view.layoutManager = layoutManager
+                        stack_view.adapter = adapter
+                        stack_view.itemAnimator.apply {
+                            if (this is DefaultItemAnimator) {
+                                supportsChangeAnimations = false
+                            }
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        Log.d("Query2", "get failed with ", exception)
                     }
             }
             .addOnFailureListener { exception ->
-                Log.d("TAG", "get failed with ", exception)
+                Log.d("Query1", "get failed with ", exception)
             }
     }
 
@@ -87,15 +91,7 @@ class Swipe : Fragment(), CardStackListener {
         }
 
         db = Firebase.firestore
-        getMatches("Heraciel")
-
-        stack_view.layoutManager = layoutManager
-        stack_view.adapter = adapter
-        stack_view.itemAnimator.apply {
-            if (this is DefaultItemAnimator) {
-                supportsChangeAnimations = false
-            }
-        }
+        getMatches("I4RNOiGQmxQ5BCyQvBtg")
 
         btnSwipeLeft.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
@@ -124,7 +120,24 @@ class Swipe : Fragment(), CardStackListener {
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        Toast.makeText(this.getContext(), if (direction == Direction.Left) "Left" else "Right"  ,Toast.LENGTH_LONG).show();
+        Toast.makeText(this.getContext(), if (direction == Direction.Left) "Left" else "Right"  ,Toast.LENGTH_SHORT).show()
+
+        val swipedUser = adapter.user[layoutManager.topPosition - 1]
+
+        //update likes/dislikes
+        val uRef = db.collection("Users").document("I4RNOiGQmxQ5BCyQvBtg")
+        uRef.update(if (direction == Direction.Left) "dislikes" else "likes", FieldValue.arrayUnion("/Users/" + swipedUser.uid))
+            .addOnSuccessListener { Log.d("SWIPE", "DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }
+
+        //TODO : create conversation
+        if (SharedData.user.likes.contains(("/Users/" + swipedUser.uid) as DocumentReference) && swipedUser.likes.contains(("/Users/" + SharedData.user.uid) as DocumentReference)) {
+            println("Match")
+        }
+
+        if (layoutManager.topPosition == adapter.itemCount) {
+            Toast.makeText(this.getContext(), "No more match",Toast.LENGTH_LONG).show()
+        }
     }
 
     override fun onCardRewound() {
