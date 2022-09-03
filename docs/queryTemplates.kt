@@ -92,3 +92,25 @@ docRef.whereArrayContains("likes", "**UID**")
         .addOnFailureListener { exception ->
             Log.d(TAG, "Error getting documents: ", exception)
         }
+
+// (**UID**) has changed his description to (**DESC**) =============================
+val uRef = db.collection("Users").document("**UID**")
+
+uRef.update("desc", "**DESC**")
+        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully updated!") }
+        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
+// (**UID**) has logged in for the first time and needs to be created =============================
+val user = hashMapOf(
+        "uid" to "Los Angeles",
+        "desc" to "",
+        "imageURL" to "",
+        "games" to [],
+        "likes" to [],
+        "dislikes" to []
+)
+
+db.collection("Users").document("**UID**")
+        .set(user)
+        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
