@@ -102,7 +102,8 @@ uRef.update("desc", "**DESC**")
 
 // (**UID**) has logged in for the first time and needs to be created =============================
 val user = hashMapOf(
-        "uid" to "Los Angeles",
+        "uid" to "**UID**",
+        "name" to "**UID**",
         "desc" to "",
         "imageURL" to "",
         "games" to [],
