@@ -10,6 +10,8 @@ import ch.gamesxmatch.R
 import ch.gamesxmatch.data.Game
 import ch.gamesxmatch.main.CoreApp
 import ch.gamesxmatch.data.SharedData
+import ch.gamesxmatch.data.User
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,10 +23,13 @@ class Landing : AppCompatActivity() {
     // TODO : Check for credentials
     // TODO : Nice text
     private lateinit var loginButton : Button
+    val uuid = sharedData.getMainUserUUID()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(checkLoggedInt()){
-            getImages()
+            getGames()
+            getUserData()
             val intent = Intent(this, CoreApp::class.java)
 
             Handler(Looper.getMainLooper()).postDelayed({
@@ -42,7 +47,7 @@ class Landing : AppCompatActivity() {
         }
     }
 
-    fun getImages(){
+    fun getGames() {
         db = Firebase.firestore
         val supportedGames = ArrayList<Game>()
         db.collection("Games")
@@ -63,9 +68,52 @@ class Landing : AppCompatActivity() {
             }
     }
 
+    fun getUserData() {
+        val docRef = db.collection("Users").document(uuid)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    println("DocumentSnapshot data: ${document.data}")
+                    var user = User()
+                    user.name = document.data?.get("name").toString()
+                    user.description = document.data?.get("desc").toString()
+                    user.imageData = document.data?.get("imageURL").toString()
+                    user.uid = uuid
+
+                    val games = document.data?.get("games") as ArrayList<DocumentReference?>
+                    for(game in games){
+                        if(game != null) {
+                            user.gamesUIDs.add(game.path.toString().substringAfter("Games/"))
+                        }
+                    }
+
+                    val likes = document.data?.get("games") as ArrayList<DocumentReference?>
+                    for(like in likes){
+                        if(like != null) {
+                            user.likes.add(like.path)
+                        }
+                    }
+
+                    val dislikes = document.data?.get("games") as ArrayList<DocumentReference?>
+                    for(dislike in dislikes){
+                        if(dislike != null) {
+                            user.dislikes.add(dislike.path.toString())
+                        }
+                    }
+
+                    sharedData.setMainUser(user)
+                } else {
+                    println("No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                println("get failed with $exception")
+            }
+    }
+
     fun checkLoggedInt() : Boolean {
         // TODO
-        return true
+        return sharedData.getMainUserUUID() != ""
     }
 
 

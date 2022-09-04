@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class Profile: Fragment() {
@@ -24,38 +27,35 @@ class Profile: Fragment() {
     lateinit var descriptionEditText: EditText
     lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
-    val games = SharedData.getInstance()
     lateinit var gameListAdapter : GameListAdaptator
+    val sharedData = SharedData.getInstance()
+    val mainUser = sharedData.getMainUser()
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        db = Firebase.firestore
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         initViews(view, inflater)
+        displayUserData(view, inflater)
         return view
     }
+
 
     private fun initViews(view : View, inflater: LayoutInflater) {
         initUsernameViews(view)
         initDescriptionViews(view)
-        initGameList(view, inflater)
         gameSelectButton = view.findViewById(R.id.profile_button_addGame)
         gameSelectButton.setOnClickListener{
             val intent = Intent(inflater.context, GameSelect::class.java)
             startActivity(intent)
         }
-
-    }
-
-
-    private fun initGameList(view : View, inflater: LayoutInflater){
         gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
-        gameListAdapter = GameListAdaptator(games.getGames())
-        gameDisplayRecyclerView.layoutManager = GridLayoutManager(inflater.context, 3)
-        gameDisplayRecyclerView.adapter = gameListAdapter
     }
+
 
     private fun initUsernameViews(view : View){
         userNameEditText = view.findViewById(R.id.profile_username_editText)
@@ -91,19 +91,37 @@ class Profile: Fragment() {
         }
     }
 
-    private fun addGame(itemPosition : Int){
-        //println(games[itemPosition])
-        // TODO
-    }
 
     private fun updateUsername() {
         val username = userNameEditText.text.toString()
-        // TODO : send request
+
+        val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
+
+        uRef.update("name", username)
+            .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> println("Error updating document $e") }
     }
 
     private fun updateDescription() {
         val description = descriptionEditText.text.toString()
-        // TODO : send request
+        val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
+
+        uRef.update("desc", description)
+            .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> println("Error updating document $e") }
     }
+
+    private fun displayUserData(view : View, inflater: LayoutInflater) {
+        userNameEditText.setText(mainUser.name)
+        descriptionEditText.setText(mainUser.description)
+        initGameList(view, inflater)
+    }
+
+    private fun initGameList(view : View, inflater: LayoutInflater){
+        gameListAdapter = GameListAdaptator(sharedData.getInterestedGames(mainUser))
+        gameDisplayRecyclerView.layoutManager = GridLayoutManager(inflater.context, 3)
+        gameDisplayRecyclerView.adapter = gameListAdapter
+    }
+
 
 }

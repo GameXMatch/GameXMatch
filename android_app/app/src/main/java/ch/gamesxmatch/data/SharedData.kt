@@ -1,15 +1,14 @@
 package ch.gamesxmatch.data
 
-import android.graphics.Bitmap
-
 
 class SharedData private constructor() {
     companion object {
         @Volatile
         private lateinit var instance: SharedData
-
+        var tempUUIDSet = false
+        var tempUUID = ""
         val games = ArrayList<Game>()
-        lateinit var user : User
+        lateinit var mainUser : User
         val matches = ArrayList<User> ()
 
         fun getInstance(): SharedData {
@@ -33,5 +32,41 @@ class SharedData private constructor() {
     fun getGames() : ArrayList<Game> {
         return games
     }
+    fun getMainUserUUID() : String {
+        if(tempUUIDSet){
+            return mainUser.uid
+        }
+        return tempUUID
+    }
 
+    fun setTempUUID(uuid : String){
+        tempUUID = uuid
+
+    }
+
+    fun setMainUser(user: User) {
+        tempUUID = ""
+        tempUUIDSet = true
+        mainUser = user
+    }
+
+    fun getMainUser() : User{
+        return mainUser
+    }
+
+    fun getInterestedGames(user : User) : ArrayList<Game> {
+        var userGames = ArrayList<Game> ()
+        for(game in games){
+            for(userGame in user.gamesUIDs){
+                if(gameUUIDisGame(userGame, game)){
+                    userGames.add(game)
+                }
+            }
+        }
+        return userGames
+    }
+
+    fun gameUUIDisGame(gameuuid : String, game: Game) : Boolean{
+        return gameuuid.contains(game.id)
+    }
 }

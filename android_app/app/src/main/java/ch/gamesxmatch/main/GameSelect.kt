@@ -24,16 +24,10 @@ class GameSelect: AppCompatActivity() {
         gameListDisplay.layoutManager = GridLayoutManager(this, 3)
         gameListDisplay.adapter = gameListAdapter
 
-        getData()
-
         returnButton.setOnClickListener{
             finish()
         }
     }
 
-    private fun getData(){
-
-        // TODO : Get messages and all the needed data
-    }
 
 }
