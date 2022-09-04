@@ -113,7 +113,7 @@ class Profile: Fragment() {
 
     private fun displayUserData(view : View, inflater: LayoutInflater) {
         userNameEditText.setText(mainUser.name)
-        descriptionEditText.setText(mainUser.description)
+        descriptionEditText.setText(mainUser.desc)
         initGameList(view, inflater)
     }
 

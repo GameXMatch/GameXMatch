@@ -53,8 +53,9 @@ class Swipe : Fragment(), CardStackListener {
                     .addOnSuccessListener { result ->
                         for (document in result) {
                             println(document.data)
-                            tmp.add(document.toObject<User>())
-
+                            val user = document.toObject<User>()
+                            user.uid = document.id
+                            tmp.add(user)
                         }
                         adapter = SwipeAdapter(tmp)
 
@@ -91,7 +92,27 @@ class Swipe : Fragment(), CardStackListener {
         }
 
         db = Firebase.firestore
-        getMatches("I4RNOiGQmxQ5BCyQvBtg")
+        getMatches(SharedData.getInstance().getMainUserUUID())
+
+        btnSwipeLeft.setOnClickListener {
+            val setting = SwipeAnimationSetting.Builder()
+                .setDirection(Direction.Left)
+                .setDuration(200)
+                .setInterpolator(AccelerateInterpolator())
+                .build()
+            layoutManager.setSwipeAnimationSetting(setting)
+            stack_view.swipe()
+        }
+
+        btnSwipeRight.setOnClickListener {
+            val setting = SwipeAnimationSetting.Builder()
+                .setDirection(Direction.Right)
+                .setDuration(200)
+                .setInterpolator(AccelerateInterpolator())
+                .build()
+            layoutManager.setSwipeAnimationSetting(setting)
+            stack_view.swipe()
+        }
 
         btnSwipeLeft.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
@@ -125,7 +146,7 @@ class Swipe : Fragment(), CardStackListener {
         val swipedUser = adapter.user[layoutManager.topPosition - 1]
 
         //update likes/dislikes
-        val uRef = db.collection("Users").document("I4RNOiGQmxQ5BCyQvBtg")
+        val uRef = db.collection("Users").document(SharedData.getInstance().getMainUserUUID())
         uRef.update(if (direction == Direction.Left) "dislikes" else "likes", FieldValue.arrayUnion(db.document("/Users/" + swipedUser.uid)))
             .addOnSuccessListener { Log.d("SWIPE", "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }

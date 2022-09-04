@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.User
 
-class SwipeAdapter(val profiles: ArrayList<Swipe.Profile>) : RecyclerView.Adapter<SwipeAdapter.ViewHolder>() {
+class SwipeAdapter(val profiles: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SwipeAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.component_swipe_profile, parent, false)
         return ViewHolder(view)
@@ -26,8 +27,8 @@ class SwipeAdapter(val profiles: ArrayList<Swipe.Profile>) : RecyclerView.Adapte
         return profiles.size
     }
 
-    private fun bindValues(data: Swipe.Profile, holder: ViewHolder) {
+    private fun bindValues(data: User, holder: ViewHolder) {
         holder.profileName.text = data.name
-        holder.profileDescription.text = data.description
+        holder.profileDescription.text = data.desc
     }
 }

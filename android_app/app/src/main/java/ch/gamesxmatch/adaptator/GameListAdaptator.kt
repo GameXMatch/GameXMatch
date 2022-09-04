@@ -22,7 +22,6 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
 
     var sharedData = SharedData.getInstance()
     var mainUser = sharedData.getMainUser()
-    var userGames = mainUser.gamesUIDs
     var onItemClick: ((String) -> Unit)? = null
 
     private lateinit var db: FirebaseFirestore
@@ -75,7 +74,13 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
 
         private fun removeGame() {
             layout.background = null
-            mainUser.removeGame(uuid.text.toString())
+
+            for (gameuuid in mainUser.games) {
+                if(gameuuid.id == uuid.text.toString()){
+                    mainUser.games.remove(gameuuid)
+                    break
+                }
+            }
 
             // Request
             println(uuid.text.toString())
@@ -87,7 +92,13 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
 
         private fun addGame() {
             layout.setBackgroundColor(Color.parseColor(selectedColor))
-            mainUser.addGame(uuid.text.toString())
+
+            for (gameuuid in mainUser.games) {
+                if(gameuuid.id == uuid.text.toString()){
+                    return
+                }
+            }
+            mainUser.games.add(db.document("/Games/" + uuid.text.toString()))
 
             // Request
             val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
@@ -112,8 +123,8 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
 
     private fun isTheUserInterestedInGame(holder: ViewHolder) : Boolean{
         val game = holder.uuid.text.toString()
-        for(userGame in userGames){
-            if(userGame.contains(game)){
+        for(userGame in mainUser.games){
+            if(userGame.id == game){
                 return true
             }
         }
