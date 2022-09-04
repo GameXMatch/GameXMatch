@@ -14,6 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class Profile: Fragment() {
@@ -27,13 +30,14 @@ class Profile: Fragment() {
     lateinit var gameListAdapter : GameListAdaptator
     val sharedData = SharedData.getInstance()
     val mainUser = sharedData.getMainUser()
-
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        db = Firebase.firestore
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         initViews(view, inflater)
         displayUserData(view, inflater)
@@ -90,12 +94,21 @@ class Profile: Fragment() {
 
     private fun updateUsername() {
         val username = userNameEditText.text.toString()
-        // TODO : send request
+
+        val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
+
+        uRef.update("name", username)
+            .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> println("Error updating document $e") }
     }
 
     private fun updateDescription() {
         val description = descriptionEditText.text.toString()
-        // TODO : send request
+        val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
+
+        uRef.update("desc", description)
+            .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+            .addOnFailureListener { e -> println("Error updating document $e") }
     }
 
     private fun displayUserData(view : View, inflater: LayoutInflater) {
