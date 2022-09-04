@@ -27,6 +27,7 @@ class Swipe : Fragment(), CardStackListener {
 
     // TODO : Implement refresh of the cards
     // TODO : Use real uid of user
+    //crash on 0 game
 
     lateinit var btnSwipeLeft : Button
     lateinit var btnSwipeRight : Button
@@ -93,26 +94,6 @@ class Swipe : Fragment(), CardStackListener {
 
         db = Firebase.firestore
         getMatches(SharedData.getInstance().getMainUserUUID())
-
-        btnSwipeLeft.setOnClickListener {
-            val setting = SwipeAnimationSetting.Builder()
-                .setDirection(Direction.Left)
-                .setDuration(200)
-                .setInterpolator(AccelerateInterpolator())
-                .build()
-            layoutManager.setSwipeAnimationSetting(setting)
-            stack_view.swipe()
-        }
-
-        btnSwipeRight.setOnClickListener {
-            val setting = SwipeAnimationSetting.Builder()
-                .setDirection(Direction.Right)
-                .setDuration(200)
-                .setInterpolator(AccelerateInterpolator())
-                .build()
-            layoutManager.setSwipeAnimationSetting(setting)
-            stack_view.swipe()
-        }
 
         btnSwipeLeft.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
