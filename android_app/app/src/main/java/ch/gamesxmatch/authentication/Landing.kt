@@ -80,19 +80,25 @@ class Landing : AppCompatActivity() {
                     user.imageData = document.data?.get("imageURL").toString()
                     user.uid = uuid
 
-                    val games = document.data?.get("games") as ArrayList<DocumentReference>
+                    val games = document.data?.get("games") as ArrayList<DocumentReference?>
                     for(game in games){
-                        user.gamesUIDs.add(game.path.toString().substringAfter("Games/"))
+                        if(game != null) {
+                            user.gamesUIDs.add(game.path.toString().substringAfter("Games/"))
+                        }
                     }
 
-                    val likes = document.data?.get("games") as ArrayList<DocumentReference>
+                    val likes = document.data?.get("games") as ArrayList<DocumentReference?>
                     for(like in likes){
-                        user.likes.add(like.path)
+                        if(like != null) {
+                            user.likes.add(like.path)
+                        }
                     }
 
-                    val dislikes = document.data?.get("games") as ArrayList<DocumentReference>
+                    val dislikes = document.data?.get("games") as ArrayList<DocumentReference?>
                     for(dislike in dislikes){
-                        user.dislikes.add(dislike.path)
+                        if(dislike != null) {
+                            user.dislikes.add(dislike.path.toString())
+                        }
                     }
 
                     sharedData.setMainUser(user)

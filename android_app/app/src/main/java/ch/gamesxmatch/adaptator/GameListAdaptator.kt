@@ -12,6 +12,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.Game
 import ch.gamesxmatch.data.SharedData
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 open class GameListAdaptator(val games : ArrayList<Game>, private val listener: Boolean = false)
     : RecyclerView.Adapter<GameListAdaptator.ViewHolder>() {
@@ -20,6 +24,8 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
     var mainUser = sharedData.getMainUser()
     var userGames = mainUser.gamesUIDs
     var onItemClick: ((String) -> Unit)? = null
+
+    private lateinit var db: FirebaseFirestore
 
     companion object {
         const val selectedColor = "#add8e6"
@@ -46,6 +52,7 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
         var layout : LinearLayout = itemView.findViewById(R.id.game_layout)
         init {
             if(listener) {
+                db = Firebase.firestore
                 onGameClicked()
             }
         }
@@ -69,13 +76,24 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
         private fun removeGame() {
             layout.background = null
             mainUser.removeGame(uuid.text.toString())
-            // TODO REQUEST
+
+            // Request
+            println(uuid.text.toString())
+            val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
+            uRef.update("games", FieldValue.arrayRemove(db.document("/Games/" + uuid.text.toString())))
+                .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+                .addOnFailureListener { e -> println("Error updating document $e") }
         }
 
         private fun addGame() {
             layout.setBackgroundColor(Color.parseColor(selectedColor))
             mainUser.addGame(uuid.text.toString())
-            // TODO REQUEST
+
+            // Request
+            val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
+            uRef.update("games", FieldValue.arrayUnion(db.document("/Games/" + uuid.text.toString())))
+                .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
+                .addOnFailureListener { e -> println("Error updating document $e") }
         }
     }
 

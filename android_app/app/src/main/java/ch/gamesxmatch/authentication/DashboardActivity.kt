@@ -86,9 +86,9 @@ class DashboardActivity : AppCompatActivity() {
             "name" to auth.currentUser?.displayName,
             "desc" to "",
             "imageURL" to auth.currentUser?.photoUrl,
-            "games" to ArrayList<DocumentReference>(),
-            "likes" to ArrayList<DocumentReference>(),
-            "dislikes" to ArrayList<DocumentReference>()
+            "games" to ArrayList<String>(),
+            "likes" to ArrayList<String>(),
+            "dislikes" to ArrayList<String>()
         )
 
         db.collection("Users").document(sharedData.getMainUserUUID())
