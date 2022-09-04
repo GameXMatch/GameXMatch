@@ -126,14 +126,14 @@ class Swipe : Fragment(), CardStackListener {
 
         //update likes/dislikes
         val uRef = db.collection("Users").document("I4RNOiGQmxQ5BCyQvBtg")
-        uRef.update(if (direction == Direction.Left) "dislikes" else "likes", FieldValue.arrayUnion("/Users/" + swipedUser.uid))
+        uRef.update(if (direction == Direction.Left) "dislikes" else "likes", FieldValue.arrayUnion(db.document("/Users/" + swipedUser.uid)))
             .addOnSuccessListener { Log.d("SWIPE", "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }
 
         //TODO : create conversation
-        if (SharedData.user.likes.contains(("/Users/" + swipedUser.uid) as DocumentReference) && swipedUser.likes.contains(("/Users/" + SharedData.user.uid) as DocumentReference)) {
+        /*if (SharedData.user.likes.contains(("/Users/" + swipedUser.uid) as DocumentReference) && swipedUser.likes.contains(("/Users/" + SharedData.user.uid) as DocumentReference)) {
             println("Match")
-        }
+        }*/
 
         if (layoutManager.topPosition == adapter.itemCount) {
             Toast.makeText(this.getContext(), "No more match",Toast.LENGTH_LONG).show()
