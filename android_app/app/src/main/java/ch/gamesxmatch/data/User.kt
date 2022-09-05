@@ -11,4 +11,12 @@ data class User(
     val likes: ArrayList<DocumentReference> = ArrayList<DocumentReference> (),
     val dislikes: ArrayList<DocumentReference> = ArrayList<DocumentReference> (),
     var imageURL : String? = null
-)
+) {
+    fun addLike(userId: DocumentReference) {
+        likes.add(userId)
+    }
+
+    fun addDislike(userId: DocumentReference) {
+        dislikes.add(userId)
+    }
+}
