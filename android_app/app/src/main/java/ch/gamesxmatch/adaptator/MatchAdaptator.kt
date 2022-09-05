@@ -8,12 +8,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.User
 import ch.gamesxmatch.main.Chat
 
 
-class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<MatchAdaptator.ViewHolder>() {
+class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<MatchAdaptator.ViewHolder>() {
 
-    var onItemClick: ((String) -> Unit)? = null
+    var onItemClick: ((User) -> Unit)? = null
 
     override fun getItemCount(): Int {
         return matches.size
@@ -49,8 +50,8 @@ class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<Mat
         }
     }
 
-    private fun bindValues(data : String, holder : ViewHolder) {
-        holder.txtNickname.setText(data)
+    private fun bindValues(data : User, holder : ViewHolder) {
+        holder.txtNickname.setText(data.name)
     }
 
 

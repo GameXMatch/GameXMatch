@@ -79,6 +79,14 @@ class Landing : AppCompatActivity() {
                 val user = document.toObject<User>()
                 user?.uid = document.id
                 user?.let { sharedData.setMainUser(it) }
+
+                for (like in document.data?.get("likes") as ArrayList<DocumentReference>) {
+                    like.get().addOnSuccessListener{ document1 ->
+                        if ((document1.data?.get("likes") as ArrayList<DocumentReference>).contains(db.document("/Users/" + document.id))) {
+                            document1.toObject<User>()?.let { sharedData.addMatch(it) }
+                        }
+                    }
+                }
             }
             .addOnFailureListener { exception ->
                 println("get failed with $exception")

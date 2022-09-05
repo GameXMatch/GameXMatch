@@ -69,4 +69,12 @@ class SharedData private constructor() {
     fun gameUUIDisGame(gameuuid : String, game: Game) : Boolean{
         return gameuuid.contains(game.id)
     }
+
+    fun addMatch(user: User) {
+        matches.add(user)
+    }
+
+    fun getMatches(): ArrayList<User> {
+        return matches
+    }
 }
