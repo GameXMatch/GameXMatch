@@ -24,7 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".authentication.DashboardActivity"></activity>
         <activity android:name=".authentication.Login"></activity>
         <activity android:name=".main.Chat"></activity>
         <activity android:name=".main.CoreApp"></activity>

@@ -11,6 +11,8 @@ import ch.gamesxmatch.data.Game
 import ch.gamesxmatch.main.CoreApp
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -24,11 +26,14 @@ class Landing : AppCompatActivity() {
     // TODO : Check for credentials
     // TODO : Nice text
     private lateinit var loginButton : Button
-    val uuid = sharedData.getMainUserUUID()
+    var uuid = sharedData.getMainUserUUID()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if(checkLoggedInt()){
+            val auth = FirebaseAuth.getInstance()
+            sharedData.setTempUUID(auth.currentUser?.uid.toString())
+            uuid = sharedData.getMainUserUUID()
             getGames()
             getUserData()
             val intent = Intent(this, CoreApp::class.java)
@@ -82,7 +87,7 @@ class Landing : AppCompatActivity() {
 
     fun checkLoggedInt() : Boolean {
         // TODO
-        return sharedData.getMainUserUUID() != ""
+        return GoogleSignIn.getLastSignedInAccount(this) != null
     }
 
 
