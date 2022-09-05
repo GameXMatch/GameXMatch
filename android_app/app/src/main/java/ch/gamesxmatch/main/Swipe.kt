@@ -47,30 +47,38 @@ class Swipe : Fragment(), CardStackListener {
             .addOnSuccessListener { result ->
                 val games = result.data?.get("games") as ArrayList<DocumentReference>
 
-                db.collection("Users")
-                    .whereArrayContainsAny("games", games)
-                    .whereNotEqualTo(FieldPath.documentId(), uid)
-                    .get()
-                    .addOnSuccessListener { result ->
-                        for (document in result) {
-                            println(document.data)
-                            val user = document.toObject<User>()
-                            user.uid = document.id
-                            tmp.add(user)
-                        }
-                        adapter = SwipeAdapter(tmp)
+                if (games.size != 0) {
+                    db.collection("Users")
+                        .whereArrayContainsAny("games", games)
+                        .whereNotEqualTo(FieldPath.documentId(), uid)
+                        .get()
+                        .addOnSuccessListener { result ->
+                            for (document in result) {
+                                println(document.data)
 
-                        stack_view.layoutManager = layoutManager
-                        stack_view.adapter = adapter
-                        stack_view.itemAnimator.apply {
-                            if (this is DefaultItemAnimator) {
-                                supportsChangeAnimations = false
+                                val mainUser = SharedData.getInstance()
+
+                                if (db.document("/Users/" + document.id) !in mainUser.getMainUser().likes
+                                    && db.document("/Users/" + document.id) !in mainUser.getMainUser().dislikes) {
+                                    val user = document.toObject<User>()
+                                    user.uid = document.id
+                                    tmp.add(user)
+                                }
+                            }
+                            adapter = SwipeAdapter(tmp)
+
+                            stack_view.layoutManager = layoutManager
+                            stack_view.adapter = adapter
+                            stack_view.itemAnimator.apply {
+                                if (this is DefaultItemAnimator) {
+                                    supportsChangeAnimations = false
+                                }
                             }
                         }
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.d("Query2", "get failed with ", exception)
-                    }
+                        .addOnFailureListener { exception ->
+                            Log.d("Query2", "get failed with ", exception)
+                        }
+                }
             }
             .addOnFailureListener { exception ->
                 Log.d("Query1", "get failed with ", exception)
