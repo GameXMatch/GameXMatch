@@ -20,6 +20,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
@@ -82,11 +83,22 @@ class Login : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                val db = Firebase.firestore
                 Handler(Looper.getMainLooper()).postDelayed({
-                    addUser()
-                    val intent = Intent(this, Landing::class.java)
-                    startActivity(intent)
-                    finish()
+                    val docRef = db.collection("Users").document(sharedData.getMainUserUUID())
+                    docRef.get()
+                        .addOnSuccessListener { document ->
+                            if (!document.exists()) {
+                                addUser()
+                                println("ahoy")
+                            }
+                            val intent = Intent(this, Landing::class.java)
+                            startActivity(intent)
+                            finish()
+                        }
+                        .addOnFailureListener { exception ->
+                            println("get failed with $exception")
+                        }
                 }, 1000)
             }
         }

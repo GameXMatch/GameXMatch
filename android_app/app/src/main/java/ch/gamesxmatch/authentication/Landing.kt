@@ -49,6 +49,7 @@ class Landing : AppCompatActivity() {
             val intent = Intent(this, Login::class.java)
             loginButton.setOnClickListener {
                 startActivity(intent)
+                finish()
             }
         }
     }

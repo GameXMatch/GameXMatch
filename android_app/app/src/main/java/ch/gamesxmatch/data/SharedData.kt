@@ -23,6 +23,7 @@ class SharedData private constructor() {
     }
 
     fun setGames(gameList : ArrayList<Game>){
+        games.clear()
         games.addAll(gameList)
         for(game in games){
             game.convertStringToBitmap()
