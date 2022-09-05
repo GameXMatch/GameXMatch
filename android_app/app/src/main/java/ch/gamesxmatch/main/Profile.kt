@@ -8,12 +8,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
+import ch.gamesxmatch.authentication.Login
 import ch.gamesxmatch.data.SharedData
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -28,6 +32,7 @@ class Profile: Fragment() {
     lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
     lateinit var gameListAdapter : GameListAdaptator
+    lateinit var logoutButton : Button
     val sharedData = SharedData.getInstance()
     val mainUser = sharedData.getMainUser()
     private lateinit var db: FirebaseFirestore
@@ -54,8 +59,25 @@ class Profile: Fragment() {
             startActivity(intent)
         }
         gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
+
+        initLogOutButton(view, inflater)
     }
 
+    private fun initLogOutButton(view : View, inflater: LayoutInflater) {
+        logoutButton = view.findViewById(R.id.profile_log_out_button)
+        logoutButton.setOnClickListener{
+            // TODO disconnect
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
+            var mGoogleSignInClient = GoogleSignIn.getClient(inflater.context, gso)
+            mGoogleSignInClient.signOut().addOnCompleteListener {
+                activity?.finish()
+            }
+
+        }
+    }
 
     private fun initUsernameViews(view : View){
         userNameEditText = view.findViewById(R.id.profile_username_editText)
