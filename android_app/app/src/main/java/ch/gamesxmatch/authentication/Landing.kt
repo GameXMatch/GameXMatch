@@ -14,6 +14,7 @@ import ch.gamesxmatch.data.User
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 
 class Landing : AppCompatActivity() {
@@ -55,11 +56,9 @@ class Landing : AppCompatActivity() {
             .addOnSuccessListener { result ->
                 for (document in result) {
                     println("${document.id} => ${document.data}")
-                    val currentGame = Game()
-                    currentGame.id = document.id
-                    currentGame.setImageBase64(document.data.get("imageURL").toString())
-                    currentGame.name = document.data.get("name").toString()
-                    supportedGames.add(currentGame)
+                    val tmp = document.toObject<Game>()
+                    tmp.id = document.id
+                    supportedGames.add(tmp)
                 }
                 sharedData.setGames(supportedGames)
             }
@@ -72,39 +71,9 @@ class Landing : AppCompatActivity() {
         val docRef = db.collection("Users").document(uuid)
         docRef.get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    println("DocumentSnapshot data: ${document.data}")
-                    var user = User()
-                    user.name = document.data?.get("name").toString()
-                    user.description = document.data?.get("desc").toString()
-                    user.imageData = document.data?.get("imageURL").toString()
-                    user.uid = uuid
-
-                    val games = document.data?.get("games") as ArrayList<DocumentReference?>
-                    for(game in games){
-                        if(game != null) {
-                            user.gamesUIDs.add(game.path.toString().substringAfter("Games/"))
-                        }
-                    }
-
-                    val likes = document.data?.get("games") as ArrayList<DocumentReference?>
-                    for(like in likes){
-                        if(like != null) {
-                            user.likes.add(like.path)
-                        }
-                    }
-
-                    val dislikes = document.data?.get("games") as ArrayList<DocumentReference?>
-                    for(dislike in dislikes){
-                        if(dislike != null) {
-                            user.dislikes.add(dislike.path.toString())
-                        }
-                    }
-
-                    sharedData.setMainUser(user)
-                } else {
-                    println("No such document")
-                }
+                val user = document.toObject<User>()
+                user?.uid = document.id
+                user?.let { sharedData.setMainUser(it) }
             }
             .addOnFailureListener { exception ->
                 println("get failed with $exception")

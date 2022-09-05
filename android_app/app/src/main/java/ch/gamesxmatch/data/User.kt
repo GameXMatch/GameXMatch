@@ -1,48 +1,14 @@
 package ch.gamesxmatch.data
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.IgnoreExtraProperties
 
-import android.graphics.Bitmap
-
-class User {
-    var name : String = ""
-    var uid : String = ""
-    var description : String = ""
-    val gamesUIDs = ArrayList<String> ()
-    val likes = ArrayList<String> ()
-    val dislikes = ArrayList<String> ()
-    var image : Bitmap? = null
-    var imageData : String = ""
-
-    fun removeGame(game: Game) {
-        for (gameuuid in gamesUIDs) {
-            if(gameuuid.contains(game.id)){
-                gamesUIDs.remove(gameuuid)
-            }
-        }
-    }
-
-    fun removeGame(game: String) {
-        for (gameuuid in gamesUIDs) {
-            if(gameuuid.contains(game)){
-                gamesUIDs.remove(gameuuid)
-            }
-        }
-    }
-
-    fun addGame(game: Game) {
-        for (gameuuid in gamesUIDs) {
-            if(gameuuid.contains(game.id)){
-                return
-            }
-        }
-        gamesUIDs.add(game.id)
-    }
-
-    fun addGame(game: String) {
-        for (gameuuid in gamesUIDs) {
-            if(gameuuid.contains(game)){
-                return
-            }
-        }
-        gamesUIDs.add(game)
-    }
-}
+@IgnoreExtraProperties
+data class User(
+    var name : String = "",
+    var uid : String = "",
+    var desc : String = "",
+    val games: ArrayList<DocumentReference> = ArrayList<DocumentReference> (),
+    val likes: ArrayList<DocumentReference> = ArrayList<DocumentReference> (),
+    val dislikes: ArrayList<DocumentReference> = ArrayList<DocumentReference> (),
+    var imageURL : String? = null
+)

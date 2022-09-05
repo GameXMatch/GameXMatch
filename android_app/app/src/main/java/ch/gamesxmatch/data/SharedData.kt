@@ -57,8 +57,8 @@ class SharedData private constructor() {
     fun getInterestedGames(user : User) : ArrayList<Game> {
         var userGames = ArrayList<Game> ()
         for(game in games){
-            for(userGame in user.gamesUIDs){
-                if(gameUUIDisGame(userGame, game)){
+            for(userGame in user.games){
+                if(gameUUIDisGame(userGame.id, game)){
                     userGames.add(game)
                 }
             }
