@@ -1,5 +1,6 @@
 name: Build and Release
 # https://www.geeksforgeeks.org/automated-release-for-android-using-github-actions/
+# https://dev.to/supersuman/build-and-sign-android-apps-using-github-actions-54j
 
 on:
  push:
@@ -11,53 +12,90 @@ on:
     - 'android_app/**'
 
 jobs:
- apk:
-   name: Generate APK
-   runs-on: ubuntu-latest
-   steps:
-     - name: Checkout
-       uses: actions/checkout@v2.4.0
-     - name: Setup JDK
-       uses: actions/setup-java@v2.5.0
-       with:
-         distribution: temurin
-         java-version: "11"
-     - name: Set execution flag for gradlew
-       run: chmod +x android_app/gradlew
-     - name: Build APK
-       run: >-
-         cd android_app/;
-         bash ./gradlew assembleDebug --stacktrace;
-     - name: Upload APK
-       uses: actions/upload-artifact@v1
-       with:
-         name: apk
-         path: android_app/app/build/outputs/apk/debug/app-debug.apk
+  Build:
+    name: Build/Sign APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
 
- release:
-   name: Release APK
-   needs: apk
-   runs-on: ubuntu-latest
-   steps:
-     - name: Download APK from build
-       uses: actions/download-artifact@v1
-       with:
-         name: apk
-     - name: Create Release
-       id: create_release
-       uses: actions/create-release@v1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         tag_name: ${{ github.run_number }}
-         release_name: ${{ github.event.repository.name }} v${{ github.run_number }}
-     - name: Upload Release APK
-       id: upload_release_asset
-       uses: actions/upload-release-asset@v1.0.1
-       env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-       with:
-         upload_url: ${{ steps.create_release.outputs.upload_url }}
-         asset_path: apk/app-debug.apk
-         asset_name: ${{ github.event.repository.name }}.apk
-         asset_content_type: application/zip
+      - name: Get Tag
+        id: var
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
+      - name: Build APK
+        id: build
+        run: >-
+          cd android_app/;
+          bash ./gradlew assembleRelease;
+      - name: Sign APK
+        id: sign_apk
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android_app/app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.EXAMPLE_APK_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
+      - name: Make artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release-signed
+          path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+
+      - name: Build AAB
+        run: >-
+          cd android_app/;
+          bash ./gradlew bundleRelease;
+      - name: Sign AAB
+        id: sign_aab
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: android_app/app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.EXAMPLE_APK_KEY }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+          
+      - name: Make artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-release-signed
+          path: ${{steps.sign_aab.outputs.signedReleaseFile}}
+
+      - name: Build Changelog
+        id: changelog
+        uses: ardalanamini/auto-changelog@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: ${{ github.event.repository.name }} v${{ github.run_number }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+
+      - name: Upload APK
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{steps.sign_apk.outputs.signedReleaseFile}}
+          asset_name: app-release-signed-${{ steps.var.outputs.tag }}.apk
+          asset_content_type: application/zip
+
+      - name: Upload AAB
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{steps.sign_aab.outputs.signedReleaseFile}}
+          asset_name: app-release-signed-${{ steps.var.outputs.tag }}.aab
+          asset_content_type: application/zip
+     
