@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
+import ch.gamesxmatch.authentication.Landing
 import ch.gamesxmatch.authentication.Login
 import ch.gamesxmatch.data.SharedData
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -73,6 +74,8 @@ class Profile: Fragment() {
                 .build()
             var mGoogleSignInClient = GoogleSignIn.getClient(inflater.context, gso)
             mGoogleSignInClient.signOut().addOnCompleteListener {
+                val intent = Intent(inflater.context, Landing::class.java)
+                startActivity(intent)
                 activity?.finish()
             }
 

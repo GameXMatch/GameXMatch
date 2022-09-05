@@ -20,6 +20,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
@@ -30,6 +31,7 @@ class Login : AppCompatActivity() {
     val Req_Code: Int = 123
     private lateinit var firebaseAuth: FirebaseAuth
     private val sharedData = SharedData.getInstance()
+    private val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,8 +84,20 @@ class Login : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                sharedData.setTempUUID(firebaseAuth.currentUser?.uid.toString())
+                val docRef = db.collection("Users").document(sharedData.getMainUserUUID())
+                docRef.get()
+                    .addOnSuccessListener { document ->
+                        if (!document.exists()) {
+                            addUser()
+                            println("ahoy")
+                        }
+
+                    }
+                    .addOnFailureListener { exception ->
+                        println("get failed with $exception")
+                    }
                 Handler(Looper.getMainLooper()).postDelayed({
-                    addUser()
                     val intent = Intent(this, Landing::class.java)
                     startActivity(intent)
                     finish()
@@ -95,8 +109,7 @@ class Login : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (GoogleSignIn.getLastSignedInAccount(this) != null) {
-            val auth = Firebase.auth
-            sharedData.setTempUUID(auth.currentUser?.uid.toString())
+            sharedData.setTempUUID(firebaseAuth.currentUser?.uid.toString())
             val intent = Intent(this, Landing::class.java)
             startActivity(intent)
             finish()
@@ -104,13 +117,12 @@ class Login : AppCompatActivity() {
     }
 
     private fun addUser() {
-        val auth = Firebase.auth
-        sharedData.setTempUUID(auth.currentUser?.uid.toString())
+        sharedData.setTempUUID(firebaseAuth.currentUser?.uid.toString())
         val db = Firebase.firestore
         val user = hashMapOf(
-            "name" to auth.currentUser?.displayName,
+            "name" to firebaseAuth.currentUser?.displayName,
             "desc" to "",
-            "imageURL" to auth.currentUser?.photoUrl,
+            "imageURL" to firebaseAuth.currentUser?.photoUrl,
             "games" to ArrayList<String>(),
             "likes" to ArrayList<String>(),
             "dislikes" to ArrayList<String>()
