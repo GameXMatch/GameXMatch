@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.MatchAdaptator
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.SharedData
 import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 
 class Match : Fragment() {
     // TODO : Data type for the matches
     lateinit var recycleView : RecyclerView
-    var matches = ArrayList<String>(asList("test1", "test2", "test3", "test4", "test5"))
+    val mainUser = SharedData.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +25,7 @@ class Match : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_match, container, false)
         recycleView = view.findViewById(R.id.match_recycleView)
-        val matchAdaptator = MatchAdaptator(matches)
+        val matchAdaptator = MatchAdaptator(mainUser.getMatches())
         recycleView.layoutManager = LinearLayoutManager(inflater.context)
         recycleView.adapter = matchAdaptator
 

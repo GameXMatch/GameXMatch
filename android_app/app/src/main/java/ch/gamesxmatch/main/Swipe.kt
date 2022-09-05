@@ -37,8 +37,9 @@ class Swipe : Fragment(), CardStackListener {
 
     lateinit var adapter : SwipeAdapter
     lateinit var layoutManager: CardStackLayoutManager
+    val mainUser = SharedData.getInstance()
 
-    fun getMatches(uid: String) {
+    fun getRecommendedUsers(uid: String) {
         val tmp = ArrayList<User>()
 
         db.collection("Users")
@@ -55,8 +56,6 @@ class Swipe : Fragment(), CardStackListener {
                         .addOnSuccessListener { result ->
                             for (document in result) {
                                 println(document.data)
-
-                                val mainUser = SharedData.getInstance()
 
                                 if (db.document("/Users/" + document.id) !in mainUser.getMainUser().likes
                                     && db.document("/Users/" + document.id) !in mainUser.getMainUser().dislikes) {
@@ -101,7 +100,7 @@ class Swipe : Fragment(), CardStackListener {
         }
 
         db = Firebase.firestore
-        getMatches(SharedData.getInstance().getMainUserUUID())
+        getRecommendedUsers(SharedData.getInstance().getMainUserUUID())
 
         btnSwipeLeft.setOnClickListener {
             val setting = SwipeAnimationSetting.Builder()
@@ -134,16 +133,23 @@ class Swipe : Fragment(), CardStackListener {
 
         val swipedUser = adapter.user[layoutManager.topPosition - 1]
 
-        //update likes/dislikes
+        val swipedUserRef = db.document("/Users/" + swipedUser.uid)
+
+        if (direction == Direction.Left) {
+            mainUser.getMainUser().addDislike(swipedUserRef)
+        } else {
+            mainUser.getMainUser().addLike(swipedUserRef)
+        }
+
         val uRef = db.collection("Users").document(SharedData.getInstance().getMainUserUUID())
-        uRef.update(if (direction == Direction.Left) "dislikes" else "likes", FieldValue.arrayUnion(db.document("/Users/" + swipedUser.uid)))
+        uRef.update(if (direction == Direction.Left) "dislikes" else "likes", FieldValue.arrayUnion(swipedUserRef))
             .addOnSuccessListener { Log.d("SWIPE", "DocumentSnapshot successfully updated!") }
             .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }
 
         //TODO : create conversation
-        /*if (SharedData.user.likes.contains(("/Users/" + swipedUser.uid) as DocumentReference) && swipedUser.likes.contains(("/Users/" + SharedData.user.uid) as DocumentReference)) {
-            println("Match")
-        }*/
+        if (mainUser.getMainUser().likes.contains(swipedUserRef) && swipedUser.likes.contains(db.document("/Users/" + mainUser.getMainUser().uid))) {
+            mainUser.addMatch(swipedUser)
+        }
 
         if (layoutManager.topPosition == adapter.itemCount) {
             Toast.makeText(this.getContext(), "No more match",Toast.LENGTH_LONG).show()
