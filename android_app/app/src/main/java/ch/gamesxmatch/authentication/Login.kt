@@ -3,10 +3,13 @@ package ch.gamesxmatch.authentication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.SharedData
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -16,6 +19,9 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 
 class Login : AppCompatActivity() {
@@ -23,6 +29,7 @@ class Login : AppCompatActivity() {
     lateinit var mGoogleSignInClient: GoogleSignInClient
     val Req_Code: Int = 123
     private lateinit var firebaseAuth: FirebaseAuth
+    private val sharedData = SharedData.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,11 +82,12 @@ class Login : AppCompatActivity() {
         val credential = GoogleAuthProvider.getCredential(account.idToken, null)
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                //SavedPreference.setEmail(this, account.email.toString())
-                //SavedPreference.setUsername(this, account.displayName.toString())
-                val intent = Intent(this, DashboardActivity::class.java)
-                startActivity(intent)
-                finish()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    addUser()
+                    val intent = Intent(this, Landing::class.java)
+                    startActivity(intent)
+                    finish()
+                }, 1000)
             }
         }
     }
@@ -87,13 +95,30 @@ class Login : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         if (GoogleSignIn.getLastSignedInAccount(this) != null) {
-            startActivity(
-                Intent(
-                    this, DashboardActivity
-                    ::class.java
-                )
-            )
+            val auth = Firebase.auth
+            sharedData.setTempUUID(auth.currentUser?.uid.toString())
+            val intent = Intent(this, Landing::class.java)
+            startActivity(intent)
             finish()
         }
+    }
+
+    private fun addUser() {
+        val auth = Firebase.auth
+        sharedData.setTempUUID(auth.currentUser?.uid.toString())
+        val db = Firebase.firestore
+        val user = hashMapOf(
+            "name" to auth.currentUser?.displayName,
+            "desc" to "",
+            "imageURL" to auth.currentUser?.photoUrl,
+            "games" to ArrayList<String>(),
+            "likes" to ArrayList<String>(),
+            "dislikes" to ArrayList<String>()
+        )
+
+        db.collection("Users").document(sharedData.getMainUserUUID())
+            .set(user)
+            .addOnSuccessListener { println("DocumentSnapshot successfully written!") }
+            .addOnFailureListener { println("Error writing document") }
     }
 }
