@@ -5,16 +5,24 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.SharedData
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+
 
 class CoreApp : AppCompatActivity() {
     lateinit var btnMatch : Button
     lateinit var btnSwipe : Button
     lateinit var btnProfile : Button
     val fragmentID = R.id.fragmentContainerView
+    val images = SharedData.getInstance()
 
     val matchFragment = Match()
     val swipeFragment = Swipe()
     val profileFragment = Profile()
+
+    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +33,10 @@ class CoreApp : AppCompatActivity() {
         btnProfile = findViewById(R.id.core_profile_button)
 
         switchFragmentAndDisableButtons(btnProfile, profileFragment)
-
+        db = Firebase.firestore
         initButtonListeners()
     }
+
 
     fun initButtonListeners(){
         btnMatch.setOnClickListener{

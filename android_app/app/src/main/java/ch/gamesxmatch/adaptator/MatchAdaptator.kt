@@ -1,4 +1,4 @@
-package ch.gamesxmatch.main
+package ch.gamesxmatch.adaptator
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.main.Chat
 
 
 class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<MatchAdaptator.ViewHolder>() {
@@ -28,7 +29,7 @@ class MatchAdaptator(val matches : ArrayList<String>) : RecyclerView.Adapter<Mat
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var txtNickname : TextView = itemView.findViewById(R.id.match_nickname)
+        var txtNickname : TextView = itemView.findViewById(R.id.message_message)
         var imgAvatar :  ImageView = itemView.findViewById(R.id.match_avatar)
         var imgNotification : ImageView = itemView.findViewById(R.id.match_new_message)
         init {
