@@ -1,6 +1,5 @@
 package ch.gamesxmatch.adaptator
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -58,10 +57,8 @@ class ChatAdaptator(private val messages : ArrayList<Message>, private val left:
         return left == data.message
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun update(toUpdate : Message) {
         messages.add(toUpdate)
-        this.notifyDataSetChanged()
+        this.notifyItemInserted(messages.size)
     }
-
 }
