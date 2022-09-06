@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.ChatAdaptator
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.SharedData
+import ch.gamesxmatch.data.User
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,6 +24,10 @@ class Chat : AppCompatActivity() {
     lateinit var returnButton: ImageButton
     lateinit var sendButton: ImageButton
     lateinit var messageEditText: EditText
+
+    var mainUser = SharedData.getInstance()
+    lateinit var chatUser : User
+    var id : Int = 0
 
     var messages = ArrayList<String>(Arrays.asList("1test", "test2", "1test3", "1test4", "test5"))
 
@@ -45,8 +51,11 @@ class Chat : AppCompatActivity() {
         // Data from the match activity
         val extras = intent.extras
         if (extras != null) {
-            val value = extras.getString("matchID")
-            matchNameText.setText(value)
+            id = extras.getInt("matchID")
+
+            chatUser = mainUser.getMatches()[id]
+
+            matchNameText.setText(chatUser.name)
         }
 
         // TODO : Get messages and all the needed data
@@ -87,7 +96,7 @@ class Chat : AppCompatActivity() {
     private fun redirectToProfile(){
         // TODO
         val intent = Intent(this, MatchProfile::class.java)
-        intent.putExtra("matchID", matchNameText.text)
+        intent.putExtra("matchID", id)
         startActivity(intent)
         println("clicked")
     }

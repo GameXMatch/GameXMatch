@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
+import ch.gamesxmatch.data.User
 
 class MatchProfile: AppCompatActivity() {
     lateinit var usernameTextView: TextView
@@ -18,6 +19,9 @@ class MatchProfile: AppCompatActivity() {
     lateinit var returnButton: ImageButton
     lateinit var gameListRecyclerView: RecyclerView
     val games = SharedData.getInstance()
+
+    var mainUser = SharedData.getInstance()
+    lateinit var chatUser : User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +47,9 @@ class MatchProfile: AppCompatActivity() {
         // Data from the match activity
         val extras = intent.extras
         if (extras != null) {
-            val value = extras.getString("matchID")
-            usernameTextView.setText(value)
+            val value = extras.getInt("matchID")
+            chatUser = mainUser.getMatches()[value]
+            usernameTextView.setText(chatUser.name)
         }
 
         // TODO : Get messages and all the needed data

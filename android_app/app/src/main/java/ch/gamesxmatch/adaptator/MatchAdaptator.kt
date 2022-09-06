@@ -39,11 +39,11 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
 
         private fun openChatOnClickListener(itemView: View) {
             itemView.setOnClickListener {
-                onItemClick?.invoke(matches[adapterPosition])
+                onItemClick?.invoke(matches[bindingAdapterPosition])
                 val intent = Intent(itemView.context, Chat::class.java)
 
                 // TODO : pass the necessary data for the chat
-                intent.putExtra("matchID", adapterPosition.toString())
+                intent.putExtra("matchID", bindingAdapterPosition)
 
                 itemView.context.startActivities(arrayOf(intent))
             }

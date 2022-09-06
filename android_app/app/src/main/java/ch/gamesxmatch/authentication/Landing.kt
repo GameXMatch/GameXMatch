@@ -84,7 +84,11 @@ class Landing : AppCompatActivity() {
                 for (like in document.data?.get("likes") as ArrayList<DocumentReference>) {
                     like.get().addOnSuccessListener{ document1 ->
                         if ((document1.data?.get("likes") as ArrayList<DocumentReference>).contains(db.document("/Users/" + document.id))) {
-                            document1.toObject<User>()?.let { sharedData.addMatch(it) }
+                            val tmp = document1.toObject<User>()
+                            if (tmp != null) {
+                                tmp.uid = document1.id
+                                sharedData.addMatch(tmp)
+                            }
                         }
                     }
                 }
