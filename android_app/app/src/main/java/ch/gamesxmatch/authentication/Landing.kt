@@ -81,6 +81,8 @@ class Landing : AppCompatActivity() {
                 user?.uid = document.id
                 user?.let { sharedData.setMainUser(it) }
 
+                sharedData.clearMatches()
+
                 for (like in document.data?.get("likes") as ArrayList<DocumentReference>) {
                     like.get().addOnSuccessListener{ document1 ->
                         if ((document1.data?.get("likes") as ArrayList<DocumentReference>).contains(db.document("/Users/" + document.id))) {
