@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.ChatAdaptator
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
 import com.squareup.picasso.Picasso
 import java.util.*
 import kotlin.collections.ArrayList
@@ -31,8 +34,10 @@ class Chat : AppCompatActivity() {
     var mainUser = SharedData.getInstance()
     lateinit var chatUser : User
     var id : Int = 0
-
-    var messages = ArrayList<String>(Arrays.asList("1test", "test2", "1test3", "1test4", "test5"))
+    lateinit var dbRef : DatabaseReference
+    var db = FirebaseDatabase.getInstance()
+    lateinit var dbListener : ValueEventListener
+    lateinit var chatAdaptator: ChatAdaptator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,13 +65,34 @@ class Chat : AppCompatActivity() {
             chatUser = mainUser.getMatches()[id]
             matchNameText.setText(chatUser.name)
             Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
-        }
 
-        // TODO : Get messages and all the needed data
+            db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+                for (group in snapshot.children)
+                {
+                    if (group.hasChild("/Evixe/") && group.hasChild("/Yanik/")) {
+                        dbRef = db.getReference("/messages/${group.key}/")
+
+                        dbListener = object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                for (message in snapshot.children) {
+                                    message.getValue<Message>()?.let { chatAdaptator.update(it) }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+
+                        }
+                        dbRef.addValueEventListener(dbListener)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupMessageDisplay(){
-        val chatAdaptator = ChatAdaptator(messages)
+        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().name)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdaptator
     }
