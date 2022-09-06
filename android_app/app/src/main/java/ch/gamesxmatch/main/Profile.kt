@@ -27,7 +27,7 @@ import com.squareup.picasso.Picasso
  *  - Display user information, including profile picture, interested games, user name and description
  *  - Edit the user name
  *  - Edit the user's description
- *  -
+ *  - Open the activity, allowing to add or delete games to the profile
  *  - Log out
  *
  * This activity transitions to :
@@ -65,14 +65,14 @@ class Profile: Fragment() {
         db = Firebase.firestore
         parentView = inflater.inflate(R.layout.fragment_profile, container, false)
         parentContext = inflater.context
-        initViews()
+        initComponents()
         return parentView
     }
 
     /**
      * Initialises the different components of the view
      */
-    private fun initViews() {
+    private fun initComponents() {
         initProfileImageView()
         initUsernameViews()
         initDescriptionViews()
