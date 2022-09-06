@@ -69,7 +69,7 @@ class Chat : AppCompatActivity() {
             db.getReference("/members/").get().addOnSuccessListener { snapshot ->
                 for (group in snapshot.children)
                 {
-                    if (group.hasChild("/Evixe/") && group.hasChild("/Yanik/")) {
+                    if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
                         dbRef = db.getReference("/messages/${group.key}/")
 
                         dbListener = object : ValueEventListener {
@@ -132,7 +132,15 @@ class Chat : AppCompatActivity() {
     }
 
     private fun sendMessage(message : String){
-        //TODO
-        println(message)
+        db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+            for (group in snapshot.children)
+            {
+                if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
+                    dbRef = db.getReference("/messages/${group.key}/${db.reference.push().key}/")
+
+                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis()))
+                }
+            }
+        }
     }
 }
