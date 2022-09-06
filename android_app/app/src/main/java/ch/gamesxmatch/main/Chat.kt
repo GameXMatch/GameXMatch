@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import ch.gamesxmatch.adaptator.ChatAdaptator
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.squareup.picasso.Picasso
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -24,6 +26,7 @@ class Chat : AppCompatActivity() {
     lateinit var returnButton: ImageButton
     lateinit var sendButton: ImageButton
     lateinit var messageEditText: EditText
+    lateinit var profilePictureImageView: ImageView
 
     var mainUser = SharedData.getInstance()
     lateinit var chatUser : User
@@ -40,6 +43,7 @@ class Chat : AppCompatActivity() {
 
     private fun initComponents(){
         setContentView(R.layout.activity_chat)
+        profilePictureImageView = findViewById(R.id.chat_profile_picture)
         recyclerView = findViewById(R.id.chat_recyclerView)
         initProfileInfo()
         setRetunButton()
@@ -54,8 +58,8 @@ class Chat : AppCompatActivity() {
             id = extras.getInt("matchID")
 
             chatUser = mainUser.getMatches()[id]
-
             matchNameText.setText(chatUser.name)
+            Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
         }
 
         // TODO : Get messages and all the needed data

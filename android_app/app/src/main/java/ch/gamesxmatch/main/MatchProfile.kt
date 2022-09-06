@@ -11,6 +11,7 @@ import ch.gamesxmatch.adaptator.GameListAdaptator
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.squareup.picasso.Picasso
 
 class MatchProfile: AppCompatActivity() {
     lateinit var usernameTextView: TextView
@@ -52,7 +53,7 @@ class MatchProfile: AppCompatActivity() {
                 match = sharedData.getMatches()[value.toInt()]
                 usernameTextView.setText(match?.name)
                 descriptionTextView.setText(match?.desc)
-
+                Picasso.with(this).load(match?.imageURL).into(userImageImageView)
             }
 
         }

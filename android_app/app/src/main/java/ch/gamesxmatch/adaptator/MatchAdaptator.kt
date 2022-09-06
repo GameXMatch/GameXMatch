@@ -1,5 +1,6 @@
 package ch.gamesxmatch.adaptator
 
+import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -10,17 +11,20 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.User
 import ch.gamesxmatch.main.Chat
+import com.squareup.picasso.Picasso
 
 
 class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<MatchAdaptator.ViewHolder>() {
 
     var onItemClick: ((User) -> Unit)? = null
+    lateinit var context: Context
 
     override fun getItemCount(): Int {
         return matches.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        context = parent.context
         val view = LayoutInflater.from(parent.context).inflate(R.layout.component_individual_match, parent, false)
         return ViewHolder(view)
     }
@@ -52,6 +56,7 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
 
     private fun bindValues(data : User, holder : ViewHolder) {
         holder.txtNickname.setText(data.name)
+        Picasso.with(context).load(data.imageURL).into(holder.imgAvatar)
     }
 
 

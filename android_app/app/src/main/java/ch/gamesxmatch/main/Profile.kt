@@ -1,14 +1,12 @@
 package ch.gamesxmatch.main
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +20,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.squareup.picasso.Picasso
+import java.net.URL
 
 
 class Profile: Fragment() {
@@ -34,6 +34,7 @@ class Profile: Fragment() {
     lateinit var gameDisplayRecyclerView: RecyclerView
     lateinit var gameListAdapter : GameListAdaptator
     lateinit var logoutButton : Button
+    lateinit var profileImageView : ImageView
     val sharedData = SharedData.getInstance()
     val mainUser = sharedData.getMainUser()
     private lateinit var db: FirebaseFirestore
@@ -62,6 +63,9 @@ class Profile: Fragment() {
         gameDisplayRecyclerView = view.findViewById(R.id.profile_game_list_recyclerView)
 
         initLogOutButton(view, inflater)
+
+        profileImageView = view.findViewById(R.id.profile_profilePicture_imageView)
+        Picasso.with(inflater.context).load(sharedData.getMainUser().imageURL).into(profileImageView)
     }
 
     private fun initLogOutButton(view : View, inflater: LayoutInflater) {
