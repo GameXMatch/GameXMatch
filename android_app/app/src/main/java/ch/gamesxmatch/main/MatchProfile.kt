@@ -18,10 +18,8 @@ class MatchProfile: AppCompatActivity() {
     lateinit var userImageImageView: ImageView
     lateinit var returnButton: ImageButton
     lateinit var gameListRecyclerView: RecyclerView
-    val games = SharedData.getInstance()
-
-    var mainUser = SharedData.getInstance()
-    lateinit var chatUser : User
+    val sharedData = SharedData.getInstance()
+    var match : User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,11 +30,13 @@ class MatchProfile: AppCompatActivity() {
         returnButton = findViewById(R.id.matchProfile_return_button)
         gameListRecyclerView = findViewById(R.id.matchProfile_game_list_recyclerView)
 
-        val gameListAdapter = GameListAdaptator(games.getGames())
-        gameListRecyclerView.layoutManager = GridLayoutManager(this, 3)
-        gameListRecyclerView.adapter = gameListAdapter
-
         getMatchData()
+        if (match != null) {
+            val gameListAdapter = GameListAdaptator(sharedData.getInterestedGames(match!!))
+            gameListRecyclerView.layoutManager = GridLayoutManager(this, 3)
+            gameListRecyclerView.adapter = gameListAdapter
+        }
+
 
         returnButton.setOnClickListener{
             finish()
@@ -47,12 +47,17 @@ class MatchProfile: AppCompatActivity() {
         // Data from the match activity
         val extras = intent.extras
         if (extras != null) {
-            val value = extras.getInt("matchID")
-            chatUser = mainUser.getMatches()[value]
-            usernameTextView.setText(chatUser.name)
-        }
+            val value = extras.get("matchID").toString()
+            if (value != null) {
+                match = sharedData.getMatches()[value.toInt()]
+                usernameTextView.setText(match?.name)
+                descriptionTextView.setText(match?.desc)
 
+            }
+
+        }
         // TODO : Get messages and all the needed data
     }
+
 
 }
