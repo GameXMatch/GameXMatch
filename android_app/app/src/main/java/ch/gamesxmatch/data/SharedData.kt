@@ -73,4 +73,8 @@ class SharedData private constructor() {
     fun getMatches(): ArrayList<User> {
         return matches
     }
+
+    fun clearMatches() {
+        matches.clear()
+    }
 }

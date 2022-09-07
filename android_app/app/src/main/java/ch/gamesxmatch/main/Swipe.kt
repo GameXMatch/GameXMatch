@@ -15,6 +15,7 @@ import ch.gamesxmatch.R
 import ch.gamesxmatch.adaptator.SwipeAdapter
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
@@ -149,6 +150,10 @@ class Swipe : Fragment(), CardStackListener {
         //TODO : create conversation
         if (mainUser.getMainUser().likes.contains(swipedUserRef) && swipedUser.likes.contains(db.document("/Users/" + mainUser.getMainUser().uid))) {
             mainUser.addMatch(swipedUser)
+
+            var inst = FirebaseDatabase.getInstance()
+            inst.getReference("/members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + mainUser.getMainUser().uid + "/").setValue(true)
+            inst.getReference("/members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + swipedUser.uid + "/").setValue(true)
         }
 
         if (layoutManager.topPosition == adapter.itemCount) {

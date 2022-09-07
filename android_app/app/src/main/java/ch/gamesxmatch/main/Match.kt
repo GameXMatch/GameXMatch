@@ -1,5 +1,6 @@
 package ch.gamesxmatch.main
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,23 @@ import ch.gamesxmatch.data.SharedData
 import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 
+/**
+ * Activity displaying all matches a user has.
+ *
+ * This activity transitions to :
+ *  - The chat between the user and the clicked match (Chat)
+ *    NOTE : The transition was implemented in MatchAdaptator
+ */
 class Match : Fragment() {
-    // TODO : Data type for the matches
+
+    // Components
     lateinit var recycleView : RecyclerView
+
+    // Data for components
+    lateinit var parentView : View
+    lateinit var parentContext: Context
+
+    // Data
     val mainUser = SharedData.getInstance()
 
     override fun onCreateView(
@@ -23,15 +38,22 @@ class Match : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_match, container, false)
-        recycleView = view.findViewById(R.id.match_recycleView)
-        val matchAdaptator = MatchAdaptator(mainUser.getMatches())
-        recycleView.layoutManager = LinearLayoutManager(inflater.context)
-        recycleView.adapter = matchAdaptator
+        parentView = inflater.inflate(R.layout.fragment_match, container, false)
+        parentContext = inflater.context
 
+        initComponents()
 
-        return view
+        return parentView
     }
 
+    /**
+     * Initialises the components of the view
+     */
+    private fun initComponents() {
+        recycleView = parentView.findViewById(R.id.match_recycleView)
+        val matchAdaptator = MatchAdaptator(mainUser.getMatches())
+        recycleView.layoutManager = LinearLayoutManager(parentContext)
+        recycleView.adapter = matchAdaptator
+    }
 
 }

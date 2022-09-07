@@ -3,12 +3,14 @@ package ch.gamesxmatch.adaptator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.squareup.picasso.Picasso
 
 class SwipeAdapter(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapter.ViewHolder>() {
 
@@ -28,6 +30,7 @@ class SwipeAdapter(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapte
         var profileName: TextView = itemView.findViewById(R.id.idProfileName)
         var profileDescription: TextView = itemView.findViewById(R.id.idProfileDescription)
         var gameList : RecyclerView = itemView.findViewById(R.id.swipe_profile_recyclerview)
+        var profilePicture : ImageView = itemView.findViewById(R.id.idProfileImage)
     }
 
     override fun getItemCount(): Int {
@@ -37,6 +40,7 @@ class SwipeAdapter(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapte
     private fun bindValues(data: User, holder: ViewHolder) {
         holder.profileName.text = data.name
         holder.profileDescription.text = data.desc
+        Picasso.with(parent.context).load(data.imageURL).into(holder.profilePicture)
         holder.gameList.layoutManager = GridLayoutManager(parent.context, 4)
         holder.gameList.adapter = GameListAdaptator(sharedData.getInterestedGames(data))
     }

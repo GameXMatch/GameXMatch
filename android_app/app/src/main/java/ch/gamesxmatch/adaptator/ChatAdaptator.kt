@@ -7,9 +7,10 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.Message
 
 
-class ChatAdaptator(val messages : ArrayList<String>) : RecyclerView.Adapter<ChatAdaptator.ViewHolder>() {
+class ChatAdaptator(private val messages : ArrayList<Message>, private val left: String) : RecyclerView.Adapter<ChatAdaptator.ViewHolder>() {
 
     companion object{
         const val margin_default = 50
@@ -35,15 +36,16 @@ class ChatAdaptator(val messages : ArrayList<String>) : RecyclerView.Adapter<Cha
         var message : TextView = itemView.findViewById(R.id.message_message)
     }
 
-    private fun bindValues(data : String, holder : ViewHolder) {
+    private fun bindValues(data: Message, holder: ViewHolder) {
         if(matchMessage(data)){
             setMargins(margin_side, margin_default, holder.message)
+            holder.message.setBackgroundColor(Color.parseColor(background_match))
         }
         else{
             setMargins(margin_default, margin_side, holder.message)
             holder.message.setBackgroundColor(Color.parseColor(background_user))
         }
-        holder.message.setText(data)
+        holder.message.setText(data.message)
     }
 
     private fun setMargins(left : Int, right : Int, message : TextView) {
@@ -52,9 +54,12 @@ class ChatAdaptator(val messages : ArrayList<String>) : RecyclerView.Adapter<Cha
         message.layoutParams = param
     }
 
-    private fun matchMessage(data: String) : Boolean {
-        // TODO
-        return data[0] == '1'
+    private fun matchMessage(data: Message) : Boolean {
+        return left == data.name
     }
 
+    fun update(toUpdate : Message) {
+        messages.add(toUpdate)
+        this.notifyItemInserted(messages.size)
+    }
 }

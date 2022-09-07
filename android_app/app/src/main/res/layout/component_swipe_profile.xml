@@ -17,7 +17,9 @@
             <ImageView
                 android:id="@+id/idProfileImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginStart="200dp"
+                android:layout_marginTop="50dp"
                 android:scaleType="fitCenter"
                 app:srcCompat="@android:drawable/ic_menu_mapmode" />
 
@@ -33,7 +35,7 @@
                 android:id="@+id/idProfileDescription"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="100dp"
                 android:gravity="center_vertical"
                 android:text="description" />
 

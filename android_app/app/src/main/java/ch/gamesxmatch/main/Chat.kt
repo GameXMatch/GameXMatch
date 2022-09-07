@@ -2,15 +2,22 @@ package ch.gamesxmatch.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.ChatAdaptator
 import ch.gamesxmatch.R
-import java.util.*
+import ch.gamesxmatch.data.Message
+import ch.gamesxmatch.data.SharedData
+import ch.gamesxmatch.data.User
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.getValue
+import com.squareup.picasso.Picasso
 import kotlin.collections.ArrayList
 
 class Chat : AppCompatActivity() {
@@ -22,8 +29,16 @@ class Chat : AppCompatActivity() {
     lateinit var returnButton: ImageButton
     lateinit var sendButton: ImageButton
     lateinit var messageEditText: EditText
+    lateinit var profilePictureImageView: ImageView
 
-    var messages = ArrayList<String>(Arrays.asList("1test", "test2", "1test3", "1test4", "test5"))
+    var mainUser = SharedData.getInstance()
+    lateinit var chatUser : User
+    var id : Int = 0
+    lateinit var dbRef : DatabaseReference
+    var db = FirebaseDatabase.getInstance()
+    lateinit var dbListener : ValueEventListener
+    lateinit var chatAdaptator: ChatAdaptator
+    var firstClick = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +49,7 @@ class Chat : AppCompatActivity() {
 
     private fun initComponents(){
         setContentView(R.layout.activity_chat)
+        profilePictureImageView = findViewById(R.id.chat_profile_picture)
         recyclerView = findViewById(R.id.chat_recyclerView)
         initProfileInfo()
         setRetunButton()
@@ -45,15 +61,51 @@ class Chat : AppCompatActivity() {
         // Data from the match activity
         val extras = intent.extras
         if (extras != null) {
-            val value = extras.getString("matchID")
-            matchNameText.setText(value)
-        }
+            id = extras.getInt("matchID")
 
-        // TODO : Get messages and all the needed data
+            chatUser = mainUser.getMatches()[id]
+            matchNameText.setText(chatUser.name)
+            Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
+
+            db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+                for (group in snapshot.children)
+                {
+                    if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
+                        dbRef = db.getReference("/messages/${group.key}/")
+
+                        dbListener = object : ValueEventListener {
+                            var first = true
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if(first) {
+                                    for (message in snapshot.children) {
+                                        message.getValue<Message>()
+                                            ?.let { chatAdaptator.update(it) }
+                                    }
+                                    first = false
+                                }
+                                else {
+
+                                    val message = snapshot.children.last().getValue<Message>()
+                                    if(message != null){
+                                        chatAdaptator.update(message)
+                                    }
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+
+                            }
+
+                        }
+                        dbRef.addValueEventListener(dbListener)
+                    }
+                }
+            }
+        }
     }
 
     private fun setupMessageDisplay(){
-        val chatAdaptator = ChatAdaptator(messages)
+        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().uid)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdaptator
     }
@@ -70,16 +122,23 @@ class Chat : AppCompatActivity() {
         sendButton.setOnClickListener{
             val message = messageEditText.text.toString()
             sendMessage(message)
+            messageEditText.setText("")
         }
     }
 
     private fun initProfileInfo(){
         matchNameText = findViewById(R.id.chat_matchName_text)
         messageEditText = findViewById(R.id.chat_editText_message)
+        messageEditText.setOnFocusChangeListener{ view: View, b: Boolean ->
+            if(firstClick){
+                messageEditText.setText("")
+                firstClick = false
+            }
+        }
         matchNameText.setOnClickListener{
             redirectToProfile()
         }
-        messageEditText.setOnClickListener{
+        profilePictureImageView.setOnClickListener{
             redirectToProfile()
         }
     }
@@ -87,13 +146,21 @@ class Chat : AppCompatActivity() {
     private fun redirectToProfile(){
         // TODO
         val intent = Intent(this, MatchProfile::class.java)
-        intent.putExtra("matchID", matchNameText.text)
+        intent.putExtra("matchID", id)
         startActivity(intent)
         println("clicked")
     }
 
     private fun sendMessage(message : String){
-        //TODO
-        println(message)
+        db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+            for (group in snapshot.children)
+            {
+                if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
+                    dbRef = db.getReference("/messages/${group.key}/${db.reference.push().key}/")
+
+                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis()))
+                }
+            }
+        }
     }
 }

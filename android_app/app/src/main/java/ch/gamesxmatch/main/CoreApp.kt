@@ -5,24 +5,27 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ch.gamesxmatch.R
-import ch.gamesxmatch.data.SharedData
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
-
+/**
+ * Main Activity of the app. Allows switching smoothly between the following three fragments :
+ *  - User's profile (Profile)
+ *  - Swipe cards, allowing to match (Swipe)
+ *  - Match list (Match)
+ *
+ * For the possible activity transitions, check every fragment individually.
+ */
 class CoreApp : AppCompatActivity() {
+
+    // Components
     lateinit var btnMatch : Button
     lateinit var btnSwipe : Button
     lateinit var btnProfile : Button
-    val fragmentID = R.id.fragmentContainerView
-    val images = SharedData.getInstance()
 
+    // Fragments
+    val fragmentID = R.id.fragmentContainerView
     val matchFragment = Match()
     val swipeFragment = Swipe()
     val profileFragment = Profile()
-
-    private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,11 +36,14 @@ class CoreApp : AppCompatActivity() {
         btnProfile = findViewById(R.id.core_profile_button)
 
         switchFragmentAndDisableButtons(btnProfile, profileFragment)
-        db = Firebase.firestore
+
         initButtonListeners()
     }
 
 
+    /**
+     * Initialise the three buttons allowing to switch between fragments
+     */
     fun initButtonListeners(){
         btnMatch.setOnClickListener{
             switchFragmentAndDisableButtons(btnMatch, matchFragment)
@@ -52,18 +58,32 @@ class CoreApp : AppCompatActivity() {
         }
     }
 
-    fun switchFragmentAndDisableButtons(button: Button, fragment: Fragment){
-        switchFragments(fragmentID, fragment)
+    /**
+     * Switches the fragment
+     *
+     * @param button Clicked button
+     * @param fragment fragment to switch to
+     */
+    fun switchFragmentAndDisableButtons(button: Button, fragment: Fragment) {
+        switchFragments(fragment)
         disableClickedAndEnableRest(button)
     }
 
-    fun switchFragments(id : Int, profile : Fragment){
+    /**
+     * Replaces the current fragment in the fragment container, with a given new one
+     * @param fragment Fragment to switch to
+     */
+    fun switchFragments(fragment : Fragment){
         supportFragmentManager.beginTransaction().apply {
-            replace(id, profile)
+            replace(fragmentID, fragment)
             commit()
         }
     }
 
+    /**
+     * Re-enables all the buttons and disabled the given button
+     * @param button Button to disable
+     */
     fun disableClickedAndEnableRest(button : Button){
         btnProfile.isEnabled = true
         btnMatch.isEnabled = true
