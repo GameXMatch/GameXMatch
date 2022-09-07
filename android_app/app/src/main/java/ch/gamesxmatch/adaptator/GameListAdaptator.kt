@@ -76,7 +76,8 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
             layout.background = null
 
             for (gameuuid in mainUser.games) {
-                if(gameuuid.id == uuid.text.toString()){
+                var game = FirebaseFirestore.getInstance().document(gameuuid)
+                if(game.id == uuid.text.toString()){
                     mainUser.games.remove(gameuuid)
                     break
                 }
@@ -94,11 +95,12 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
             layout.setBackgroundColor(Color.parseColor(selectedColor))
 
             for (gameuuid in mainUser.games) {
-                if(gameuuid.id == uuid.text.toString()){
+                var game = FirebaseFirestore.getInstance().document(gameuuid)
+                if(game.id == uuid.text.toString()){
                     return
                 }
             }
-            mainUser.games.add(db.document("/Games/" + uuid.text.toString()))
+            mainUser.games.add("/Games/" + uuid.text.toString() + "/")
 
             // Request
             val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
@@ -124,7 +126,8 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
     private fun isTheUserInterestedInGame(holder: ViewHolder) : Boolean{
         val game = holder.uuid.text.toString()
         for(userGame in mainUser.games){
-            if(userGame.id == game){
+            var dbGame = FirebaseFirestore.getInstance().document(userGame)
+            if(dbGame.id == game){
                 return true
             }
         }

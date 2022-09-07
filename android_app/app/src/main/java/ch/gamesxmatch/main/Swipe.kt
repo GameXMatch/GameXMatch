@@ -41,7 +41,7 @@ class Swipe : Fragment(), CardStackListener {
     val mainUser = SharedData.getInstance()
 
     fun getRecommendedUsers(uid: String) {
-        val tmp = ArrayList<User>()
+        val tmpUser = ArrayList<User>()
 
         db.collection("Users")
             .document(uid)
@@ -58,14 +58,39 @@ class Swipe : Fragment(), CardStackListener {
                             for (document in result) {
                                 println(document.data)
 
-                                if (db.document("/Users/" + document.id) !in mainUser.getMainUser().likes
-                                    && db.document("/Users/" + document.id) !in mainUser.getMainUser().dislikes) {
-                                    val user = document.toObject<User>()
+                                if (("/Users/" + document.id + "/") !in mainUser.getMainUser().likes
+                                    && ("/Users/" + document.id + "/") !in mainUser.getMainUser().dislikes) {
+                                    val user = User()
+                                    user.name = document.data?.get("name") as String
+                                    user.desc = document.data?.get("desc") as String
+
+                                    val tmp = ArrayList<String>()
+                                    for (doc in document.data?.get("likes") as ArrayList<DocumentReference>)
+                                    {
+                                        tmp.add(doc.path)
+                                    }
+                                    user.likes = tmp
+
+                                    tmp.clear()
+                                    for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>)
+                                    {
+                                        tmp.add(doc.path)
+                                    }
+                                    user.dislikes = tmp
+
+                                    tmp.clear()
+                                    for (doc in document.data?.get("games") as ArrayList<DocumentReference>)
+                                    {
+                                        tmp.add(doc.path)
+                                    }
+                                    user.games = tmp
+
+                                    user.imageURL = document.data?.get("imageURL") as String
                                     user.uid = document.id
-                                    tmp.add(user)
+                                    tmpUser.add(user)
                                 }
                             }
-                            adapter = SwipeAdapter(tmp)
+                            adapter = SwipeAdapter(tmpUser)
 
                             stack_view.layoutManager = layoutManager
                             stack_view.adapter = adapter
@@ -137,9 +162,9 @@ class Swipe : Fragment(), CardStackListener {
         val swipedUserRef = db.document("/Users/" + swipedUser.uid)
 
         if (direction == Direction.Left) {
-            mainUser.getMainUser().addDislike(swipedUserRef)
+            mainUser.getMainUser().addDislike("/Users/" + swipedUser.uid + "/")
         } else {
-            mainUser.getMainUser().addLike(swipedUserRef)
+            mainUser.getMainUser().addLike("/Users/" + swipedUser.uid + "/")
         }
 
         val uRef = db.collection("Users").document(SharedData.getInstance().getMainUserUUID())
@@ -148,9 +173,7 @@ class Swipe : Fragment(), CardStackListener {
             .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }
 
         //TODO : create conversation
-        if (mainUser.getMainUser().likes.contains(swipedUserRef) && swipedUser.likes.contains(db.document("/Users/" + mainUser.getMainUser().uid))) {
-            mainUser.addMatch(swipedUser)
-
+        if (mainUser.getMainUser().likes.contains("/Users/" + swipedUser.uid + "/") && swipedUser.likes.contains("/Users/" + mainUser.getMainUser().uid + "/")) {
             var inst = FirebaseDatabase.getInstance()
             inst.getReference("/members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + mainUser.getMainUser().uid + "/").setValue(true)
             inst.getReference("/members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + swipedUser.uid + "/").setValue(true)

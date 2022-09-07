@@ -18,6 +18,7 @@ import ch.gamesxmatch.data.User
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.squareup.picasso.Picasso
+import java.io.Serializable
 import kotlin.collections.ArrayList
 
 class Chat : AppCompatActivity() {
@@ -61,9 +62,8 @@ class Chat : AppCompatActivity() {
         // Data from the match activity
         val extras = intent.extras
         if (extras != null) {
-            id = extras.getInt("matchID")
+            chatUser = extras.get("match") as User
 
-            chatUser = mainUser.getMatches()[id]
             matchNameText.setText(chatUser.name)
             Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
 
@@ -146,7 +146,7 @@ class Chat : AppCompatActivity() {
     private fun redirectToProfile(){
         // TODO
         val intent = Intent(this, MatchProfile::class.java)
-        intent.putExtra("matchID", id)
+        intent.putExtra("match", chatUser)
         startActivity(intent)
         println("clicked")
     }

@@ -1,5 +1,7 @@
 package ch.gamesxmatch.data
 
+import com.google.firebase.firestore.FirebaseFirestore
+
 
 class SharedData private constructor() {
     companion object {
@@ -8,7 +10,6 @@ class SharedData private constructor() {
         var tempUUID = ""
         val games = ArrayList<Game>()
         lateinit var mainUser : User
-        val matches = ArrayList<User> ()
 
         fun getInstance(): SharedData {
             synchronized(this) {
@@ -54,7 +55,8 @@ class SharedData private constructor() {
         var userGames = ArrayList<Game> ()
         for(game in games){
             for(userGame in user.games){
-                if(gameUUIDisGame(userGame.id, game)){
+                var dbGame = FirebaseFirestore.getInstance().document(userGame)
+                if(gameUUIDisGame(dbGame.id, game)){
                     userGames.add(game)
                 }
             }
@@ -64,17 +66,5 @@ class SharedData private constructor() {
 
     fun gameUUIDisGame(gameuuid : String, game: Game) : Boolean{
         return gameuuid.contains(game.id)
-    }
-
-    fun addMatch(user: User) {
-        matches.add(user)
-    }
-
-    fun getMatches(): ArrayList<User> {
-        return matches
-    }
-
-    fun clearMatches() {
-        matches.clear()
     }
 }
