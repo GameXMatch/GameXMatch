@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.GameListAdaptator
+import ch.gamesxmatch.adaptor.GameListAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
@@ -81,7 +81,7 @@ class MatchProfile: AppCompatActivity() {
 
         val matchGames = sharedData.getInterestedGames(match!!)
         gameListRecyclerView.layoutManager = GridLayoutManager(this, 3)
-        gameListRecyclerView.adapter = GameListAdaptator(matchGames)
+        gameListRecyclerView.adapter = GameListAdaptor(matchGames)
     }
 
 

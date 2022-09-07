@@ -8,23 +8,17 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.MatchAdaptator
+import ch.gamesxmatch.adaptor.MatchAdaptor
 import ch.gamesxmatch.R
-import ch.gamesxmatch.adaptator.ChatAdaptator
-import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 
 /**
@@ -49,7 +43,7 @@ class Match : Fragment() {
     var db = FirebaseDatabase.getInstance()
     private var fire = Firebase.firestore
     lateinit var dbListener : ValueEventListener
-    lateinit var matchAdaptator: MatchAdaptator
+    lateinit var matchAdaptator: MatchAdaptor
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +64,7 @@ class Match : Fragment() {
      */
     private fun initComponents() {
         recycleView = parentView.findViewById(R.id.match_recycleView)
-        matchAdaptator = MatchAdaptator(ArrayList())
+        matchAdaptator = MatchAdaptor(ArrayList())
         recycleView.layoutManager = LinearLayoutManager(parentContext)
         recycleView.adapter = matchAdaptator
     }

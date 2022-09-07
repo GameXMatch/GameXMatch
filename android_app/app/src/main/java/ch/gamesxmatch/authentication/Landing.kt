@@ -37,7 +37,6 @@ class Landing : AppCompatActivity() {
     var sharedData = SharedData.getInstance()
     var uuid = sharedData.getMainUserUUID()
 
-    // TODO : Nice text
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,26 +109,17 @@ class Landing : AppCompatActivity() {
                 user.name = document.data?.get("name") as String
                 user.desc = document.data?.get("desc") as String
 
-                val tmp1 = ArrayList<String>()
-                for (doc in document.data?.get("likes") as ArrayList<DocumentReference>)
-                {
-                    tmp1.add(doc.path)
+                for (doc in document.data?.get("likes") as ArrayList<DocumentReference>) {
+                    user.likes.add(doc.path)
                 }
-                user.likes = tmp1
 
-                val tmp2 = ArrayList<String>()
-                for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>)
-                {
-                    tmp2.add(doc.path)
+                for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>) {
+                    user.dislikes.add(doc.path)
                 }
-                user.dislikes = tmp2
 
-                val tmp3 = ArrayList<String>()
-                for (doc in document.data?.get("games") as ArrayList<DocumentReference>)
-                {
-                    tmp3.add(doc.path)
+                for (doc in document.data?.get("games") as ArrayList<DocumentReference>) {
+                    user.games.add(doc.path)
                 }
-                user.games = tmp3
 
                 user.imageURL = document.data?.get("imageURL") as String
                 user.uid = document.id
@@ -146,7 +136,5 @@ class Landing : AppCompatActivity() {
     private fun checkLoggedInt() : Boolean {
         return GoogleSignIn.getLastSignedInAccount(this) != null
     }
-
-
 
 }

@@ -12,18 +12,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.adaptator.SwipeAdapter
+import ch.gamesxmatch.adaptor.SwipeAdaptor
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.yuyakaido.android.cardstackview.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity handling the swipe action.
+ *
+ * This activity transitions doesn't transition to any other activity or fragments
+ */
 class Swipe : Fragment(), CardStackListener {
 
     // TODO : Implement refresh of the cards
@@ -36,7 +39,7 @@ class Swipe : Fragment(), CardStackListener {
 
     lateinit var db: FirebaseFirestore
 
-    lateinit var adapter : SwipeAdapter
+    lateinit var adapter : SwipeAdaptor
     lateinit var layoutManager: CardStackLayoutManager
     val mainUser = SharedData.getInstance()
 
@@ -91,7 +94,7 @@ class Swipe : Fragment(), CardStackListener {
                                     tmpUser.add(user)
                                 }
                             }
-                            adapter = SwipeAdapter(tmpUser)
+                            adapter = SwipeAdaptor(tmpUser)
 
                             stack_view.layoutManager = layoutManager
                             stack_view.adapter = adapter

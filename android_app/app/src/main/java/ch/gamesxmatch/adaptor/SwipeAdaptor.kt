@@ -1,4 +1,4 @@
-package ch.gamesxmatch.adaptator
+package ch.gamesxmatch.adaptor
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,10 @@ import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
 import com.squareup.picasso.Picasso
 
-class SwipeAdapter(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapter.ViewHolder>() {
+/**
+ * Simple adaptor for the swipe cards. 
+ */
+class SwipeAdaptor(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdaptor.ViewHolder>() {
 
     var sharedData = SharedData.getInstance()
     lateinit var parent: ViewGroup
@@ -42,6 +45,6 @@ class SwipeAdapter(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapte
         holder.profileDescription.text = data.desc
         Picasso.with(parent.context).load(data.imageURL).into(holder.profilePicture)
         holder.gameList.layoutManager = GridLayoutManager(parent.context, 4)
-        holder.gameList.adapter = GameListAdaptator(sharedData.getInterestedGames(data))
+        holder.gameList.adapter = GameListAdaptor(sharedData.getInterestedGames(data))
     }
 }

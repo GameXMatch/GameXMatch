@@ -6,7 +6,7 @@ import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.GameListAdaptator
+import ch.gamesxmatch.adaptor.GameListAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 
@@ -39,7 +39,7 @@ class GameSelect: AppCompatActivity() {
         setContentView(R.layout.activity_game_select)
         returnButton = findViewById(R.id.gameSelect_imageButton)
         gameListDisplay = findViewById(R.id.gameSelect_RecyclerView)
-        val gameListAdapter = GameListAdaptator(games.getGames(), true)
+        val gameListAdapter = GameListAdaptor(games.getGames(), true)
         gameListDisplay.layoutManager = GridLayoutManager(this, 3)
         gameListDisplay.adapter = gameListAdapter
 
