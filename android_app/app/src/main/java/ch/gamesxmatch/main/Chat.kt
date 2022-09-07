@@ -103,7 +103,7 @@ class Chat : AppCompatActivity() {
     }
 
     private fun setupMessageDisplay(){
-        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().name)
+        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().uid)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdaptator
     }
