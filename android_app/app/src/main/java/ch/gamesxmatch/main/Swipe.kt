@@ -23,7 +23,11 @@ import com.google.firebase.ktx.Firebase
 import com.yuyakaido.android.cardstackview.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity handling the swipe action.
+ *
+ * This activity transitions doesn't transition to any other activity or fragments
+ */
 class Swipe : Fragment(), CardStackListener {
 
     // TODO : Implement refresh of the cards
