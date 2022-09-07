@@ -16,8 +16,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-open class GameListAdaptator(val games : ArrayList<Game>, private val listener: Boolean = false)
-    : RecyclerView.Adapter<GameListAdaptator.ViewHolder>() {
+/**
+ * Adaptor of the game list. Is used both as a way to display games in read-only mode, and as a way
+ * for the user to add or delete selected games. The listener bool flag is here for selecting
+ * which mode to use.
+ *
+ * The current structure is very confusing, but refactoring it would be very dangerous with the
+ * deadline approaching quickly.
+ */
+open class GameListAdaptor(val games : ArrayList<Game>, private val listener: Boolean = false)
+    : RecyclerView.Adapter<GameListAdaptor.ViewHolder>() {
 
     var sharedData = SharedData.getInstance()
     var mainUser = sharedData.getMainUser()
@@ -43,11 +51,46 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
         bindValues(position, holder)
     }
 
+    /**
+     * Sets the data on the components
+     */
+    private fun bindValues(index: Int, holder: ViewHolder) {
+        holder.message.setText(games[index].name)
+        if(games[index].image != null) {
+            holder.image.setImageBitmap(games[index].image)
+        }
+        holder.uuid.setText(games[index].id)
+
+
+        if(isTheUserInterestedInGame(holder) && listener){
+            holder.layout.setBackgroundColor(Color.parseColor(selectedColor))
+        }
+    }
+
+    /**
+     * Checks if the user already added the game among the interested ones 
+     */
+    private fun isTheUserInterestedInGame(holder: ViewHolder) : Boolean{
+        val game = holder.uuid.text.toString()
+        for(userGame in mainUser.games){
+            if(userGame.contains(game)){
+                return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * Gets the reference of the different components, and in the case of the listener flag being
+     * true, and sets up the logic of the listener
+     */
     open inner class ViewHolder(private val itemView: View, listener: Boolean) : RecyclerView.ViewHolder(itemView) {
         var message: TextView = itemView.findViewById(R.id.game_name)
         var image : ImageView = itemView.findViewById(R.id.game_imageView)
         var uuid : TextView = itemView.findViewById(R.id.game_uuid)
         var layout : LinearLayout = itemView.findViewById(R.id.game_layout)
+
+        // Listener stuff
         init {
             if(listener) {
                 db = Firebase.firestore
@@ -82,7 +125,6 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
             }
 
             // Request
-            println(uuid.text.toString())
             val uRef = db.collection("Users").document(sharedData.getMainUserUUID())
             uRef.update("games", FieldValue.arrayRemove(db.document("/Games/" + uuid.text.toString())))
                 .addOnSuccessListener { println("DocumentSnapshot successfully updated!") }
@@ -107,27 +149,5 @@ open class GameListAdaptator(val games : ArrayList<Game>, private val listener: 
         }
     }
 
-    private fun bindValues(index: Int, holder: ViewHolder) {
-        holder.message.setText(games[index].name)
-        if(games[index].image != null) {
-            holder.image.setImageBitmap(games[index].image)
-        }
-        holder.uuid.setText(games[index].id)
 
-
-        if(isTheUserInterestedInGame(holder) && listener){
-            holder.layout.setBackgroundColor(Color.parseColor(selectedColor))
-        }
-    }
-
-    private fun isTheUserInterestedInGame(holder: ViewHolder) : Boolean{
-        val game = holder.uuid.text.toString()
-        for(userGame in mainUser.games){
-            if(userGame.contains(game)){
-                return true
-            }
-        }
-
-        return false
-    }
 }

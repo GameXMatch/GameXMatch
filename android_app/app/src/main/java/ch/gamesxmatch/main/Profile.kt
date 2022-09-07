@@ -10,7 +10,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.GameListAdaptator
+import ch.gamesxmatch.adaptator.GameListAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.authentication.Landing
 import ch.gamesxmatch.data.SharedData
@@ -43,7 +43,7 @@ class Profile: Fragment() {
     lateinit var descriptionEditText: EditText
     lateinit var gameSelectButton: Button
     lateinit var gameDisplayRecyclerView: RecyclerView
-    lateinit var gameListAdapter : GameListAdaptator
+    lateinit var gameListAdapter : GameListAdaptor
     lateinit var logoutButton : Button
     lateinit var profileImageView : ImageView
 
@@ -125,7 +125,7 @@ class Profile: Fragment() {
      */
     private fun initGameDisplay() {
         gameDisplayRecyclerView = parentView.findViewById(R.id.profile_game_list_recyclerView)
-        gameListAdapter = GameListAdaptator(userGames)
+        gameListAdapter = GameListAdaptor(userGames)
         gameDisplayRecyclerView.layoutManager = GridLayoutManager(parentContext, 3)
         gameDisplayRecyclerView.adapter = gameListAdapter
     }
