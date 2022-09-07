@@ -1,4 +1,4 @@
-package ch.gamesxmatch.adaptator
+package ch.gamesxmatch.adaptor
 
 import android.graphics.Color
 import android.view.LayoutInflater

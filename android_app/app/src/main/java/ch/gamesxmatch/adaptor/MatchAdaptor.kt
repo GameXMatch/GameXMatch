@@ -1,4 +1,4 @@
-package ch.gamesxmatch.adaptator
+package ch.gamesxmatch.adaptor
 
 import android.content.Context
 import android.content.Intent
@@ -9,13 +9,15 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
-import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.User
 import ch.gamesxmatch.main.Chat
 import com.squareup.picasso.Picasso
 
-
-class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<MatchAdaptator.ViewHolder>() {
+/**
+ * Adaptor for the list of matches. Displays all the matches with the user and handles the click,
+ * allowing the user to be redirected in the chat
+ */
+class MatchAdaptor(val matches : ArrayList<User>) : RecyclerView.Adapter<MatchAdaptor.ViewHolder>() {
 
     var onItemClick: ((User) -> Unit)? = null
     lateinit var context: Context
@@ -41,6 +43,9 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
             openChatOnClickListener(itemView)
         }
 
+        /**
+         * Redirects the user to the chat on click
+         */
         private fun openChatOnClickListener(itemView: View) {
             itemView.setOnClickListener {
                 onItemClick?.invoke(matches[bindingAdapterPosition])
@@ -55,11 +60,17 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
         }
     }
 
+    /**
+     * sets the values in the components
+     */
     private fun bindValues(data : User, holder : ViewHolder) {
         holder.txtNickname.setText(data.name)
         Picasso.with(context).load(data.imageURL).into(holder.imgAvatar)
     }
 
+    /**
+     * Refreshes the display of the matches on a new added one
+     */
     fun update(toUpdate : User) {
         matches.add(toUpdate)
         this.notifyItemInserted(matches.size)
