@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.R
+import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.User
 import ch.gamesxmatch.main.Chat
 import com.squareup.picasso.Picasso
@@ -36,7 +37,6 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var txtNickname : TextView = itemView.findViewById(R.id.message_message)
         var imgAvatar :  ImageView = itemView.findViewById(R.id.match_avatar)
-        var imgNotification : ImageView = itemView.findViewById(R.id.match_new_message)
         init {
             openChatOnClickListener(itemView)
         }
@@ -47,7 +47,8 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
                 val intent = Intent(itemView.context, Chat::class.java)
 
                 // TODO : pass the necessary data for the chat
-                intent.putExtra("matchID", bindingAdapterPosition)
+                intent.putExtra("match", matches[bindingAdapterPosition])
+                val test = matches[bindingAdapterPosition]
 
                 itemView.context.startActivities(arrayOf(intent))
             }
@@ -59,6 +60,8 @@ class MatchAdaptator(val matches : ArrayList<User>) : RecyclerView.Adapter<Match
         Picasso.with(context).load(data.imageURL).into(holder.imgAvatar)
     }
 
-
-
+    fun update(toUpdate : User) {
+        matches.add(toUpdate)
+        this.notifyItemInserted(matches.size)
+    }
 }

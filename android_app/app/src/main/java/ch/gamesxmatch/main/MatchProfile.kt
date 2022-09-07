@@ -63,8 +63,7 @@ class MatchProfile: AppCompatActivity() {
     private fun handleData(){
         val extras = intent.extras
         if (extras != null) {
-            val value = extras.get("matchID").toString()
-            match = sharedData.getMatches()[value.toInt()]
+            match = extras.get("match") as User
             setMatchData()
         }
         else {

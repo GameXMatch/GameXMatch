@@ -106,23 +106,34 @@ class Landing : AppCompatActivity() {
         val docRef = db.collection("Users").document(uuid)
         docRef.get()
             .addOnSuccessListener { document ->
-                val user = document.toObject<User>()
-                user?.uid = document.id
-                user?.let { sharedData.setMainUser(it) }
+                val user = User()
+                user.name = document.data?.get("name") as String
+                user.desc = document.data?.get("desc") as String
 
-                sharedData.clearMatches()
-
-                for (like in document.data?.get("likes") as ArrayList<DocumentReference>) {
-                    like.get().addOnSuccessListener{ document1 ->
-                        if ((document1.data?.get("likes") as ArrayList<DocumentReference>).contains(db.document("/Users/" + document.id))) {
-                            val tmp = document1.toObject<User>()
-                            if (tmp != null) {
-                                tmp.uid = document1.id
-                                sharedData.addMatch(tmp)
-                            }
-                        }
-                    }
+                val tmp1 = ArrayList<String>()
+                for (doc in document.data?.get("likes") as ArrayList<DocumentReference>)
+                {
+                    tmp1.add(doc.path)
                 }
+                user.likes = tmp1
+
+                val tmp2 = ArrayList<String>()
+                for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>)
+                {
+                    tmp2.add(doc.path)
+                }
+                user.dislikes = tmp2
+
+                val tmp3 = ArrayList<String>()
+                for (doc in document.data?.get("games") as ArrayList<DocumentReference>)
+                {
+                    tmp3.add(doc.path)
+                }
+                user.games = tmp3
+
+                user.imageURL = document.data?.get("imageURL") as String
+                user.uid = document.id
+                sharedData.setMainUser(user)
             }
             .addOnFailureListener { exception ->
                 println("get failed with $exception")

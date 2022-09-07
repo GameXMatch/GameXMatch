@@ -2,6 +2,7 @@ package ch.gamesxmatch.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
@@ -18,6 +19,7 @@ import ch.gamesxmatch.data.User
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.squareup.picasso.Picasso
+import java.io.Serializable
 import kotlin.collections.ArrayList
 
 class Chat : AppCompatActivity() {
@@ -61,17 +63,16 @@ class Chat : AppCompatActivity() {
         // Data from the match activity
         val extras = intent.extras
         if (extras != null) {
-            id = extras.getInt("matchID")
+            chatUser = extras.get("match") as User
 
-            chatUser = mainUser.getMatches()[id]
             matchNameText.setText(chatUser.name)
             Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
 
-            db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+            db.getReference("members").get().addOnSuccessListener { snapshot ->
                 for (group in snapshot.children)
                 {
                     if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
-                        dbRef = db.getReference("/messages/${group.key}/")
+                        dbRef = db.getReference("messages/${group.key}")
 
                         dbListener = object : ValueEventListener {
                             var first = true
@@ -81,6 +82,7 @@ class Chat : AppCompatActivity() {
                                         message.getValue<Message>()
                                             ?.let { chatAdaptator.update(it) }
                                     }
+                                    recyclerView.scrollToPosition((snapshot.childrenCount - 1).toInt())
                                     first = false
                                 }
                                 else {
@@ -146,21 +148,24 @@ class Chat : AppCompatActivity() {
     private fun redirectToProfile(){
         // TODO
         val intent = Intent(this, MatchProfile::class.java)
-        intent.putExtra("matchID", id)
+        intent.putExtra("match", chatUser)
         startActivity(intent)
         println("clicked")
     }
 
     private fun sendMessage(message : String){
-        db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+        db.getReference("members/").get().addOnSuccessListener { snapshot ->
             for (group in snapshot.children)
             {
                 if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
-                    dbRef = db.getReference("/messages/${group.key}/${db.reference.push().key}/")
+                    dbRef = db.getReference("messages/${group.key}/${db.reference.push().key}")
 
-                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis()))
+                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis())).addOnFailureListener { exception ->  Log.d("MESSAGE", "get failed with ", exception)}
+                    break
                 }
             }
+        }.addOnFailureListener { exception ->
+            Log.d("MESSAGE", "get failed with ", exception)
         }
     }
 }

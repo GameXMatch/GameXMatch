@@ -10,7 +10,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.MatchAdaptator
 import ch.gamesxmatch.R
+import ch.gamesxmatch.adaptator.ChatAdaptator
+import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.SharedData
+import ch.gamesxmatch.data.User
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
+import com.google.firebase.ktx.Firebase
 import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 
@@ -33,6 +46,11 @@ class Match : Fragment() {
     // Data
     val mainUser = SharedData.getInstance()
 
+    var db = FirebaseDatabase.getInstance()
+    private var fire = Firebase.firestore
+    lateinit var dbListener : ValueEventListener
+    lateinit var matchAdaptator: MatchAdaptator
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +60,7 @@ class Match : Fragment() {
         parentContext = inflater.context
 
         initComponents()
+        initListener()
 
         return parentView
     }
@@ -51,9 +70,75 @@ class Match : Fragment() {
      */
     private fun initComponents() {
         recycleView = parentView.findViewById(R.id.match_recycleView)
-        val matchAdaptator = MatchAdaptator(mainUser.getMatches())
+        matchAdaptator = MatchAdaptator(ArrayList())
         recycleView.layoutManager = LinearLayoutManager(parentContext)
         recycleView.adapter = matchAdaptator
     }
 
+    private fun initListener() {
+        var dbRef = db.getReference("/members/")
+
+        dbListener = object : ValueEventListener {
+            var first = true
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(first) {
+                    for (message in snapshot.children) {
+                        checkMembers(message)
+                    }
+                    first = false
+                }
+                else {
+                    checkMembers(snapshot.children.last())
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        }
+        dbRef.addValueEventListener(dbListener)
+    }
+
+    fun checkMembers(key : DataSnapshot) {
+        val uids = key.key?.split("_")
+        if (uids != null) {
+            if (uids.contains(mainUser.getMainUserUUID())) {
+                fire.collection("Users").document(if (uids.first() == mainUser.getMainUserUUID()) uids.last() else uids.first())
+                    .get()
+                    .addOnSuccessListener { document ->
+                        val user = User()
+                        user.name = document.data?.get("name") as String
+                        user.desc = document.data?.get("desc") as String
+
+                        val tmp = ArrayList<String>()
+                        for (doc in document.data?.get("likes") as ArrayList<DocumentReference>)
+                        {
+                            tmp.add(doc.path)
+                        }
+                        user.likes = tmp
+
+                        tmp.clear()
+                        for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>)
+                        {
+                            tmp.add(doc.path)
+                        }
+                        user.dislikes = tmp
+
+                        tmp.clear()
+                        for (doc in document.data?.get("games") as ArrayList<DocumentReference>)
+                        {
+                            tmp.add(doc.path)
+                        }
+                        user.games = tmp
+
+                        user.imageURL = document.data?.get("imageURL") as String
+                        user.uid = document.id
+                        if (user != null) {
+                            matchAdaptator.update(user)
+                        }
+                    }
+            }
+        }
+    }
 }
