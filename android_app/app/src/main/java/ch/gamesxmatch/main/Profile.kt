@@ -138,6 +138,7 @@ class Profile: Fragment() {
         gameSelectButton.setOnClickListener{
             val intent = Intent(parentContext, GameSelect::class.java)
             startActivity(intent)
+            activity?.finish()
         }
     }
 

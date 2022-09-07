@@ -1,5 +1,6 @@
 package ch.gamesxmatch.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -43,6 +44,8 @@ class GameSelect: AppCompatActivity() {
         gameListDisplay.adapter = gameListAdapter
 
         returnButton.setOnClickListener{
+            val intent = Intent(this, CoreApp::class.java)
+            startActivity(intent)
             finish()
         }
     }
