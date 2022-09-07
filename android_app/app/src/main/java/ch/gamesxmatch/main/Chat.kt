@@ -2,6 +2,7 @@ package ch.gamesxmatch.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
@@ -67,11 +68,11 @@ class Chat : AppCompatActivity() {
             matchNameText.setText(chatUser.name)
             Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
 
-            db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+            db.getReference("members").get().addOnSuccessListener { snapshot ->
                 for (group in snapshot.children)
                 {
                     if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
-                        dbRef = db.getReference("/messages/${group.key}/")
+                        dbRef = db.getReference("messages/${group.key}")
 
                         dbListener = object : ValueEventListener {
                             var first = true
@@ -152,15 +153,18 @@ class Chat : AppCompatActivity() {
     }
 
     private fun sendMessage(message : String){
-        db.getReference("/members/").get().addOnSuccessListener { snapshot ->
+        db.getReference("members/").get().addOnSuccessListener { snapshot ->
             for (group in snapshot.children)
             {
                 if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
-                    dbRef = db.getReference("/messages/${group.key}/${db.reference.push().key}/")
+                    dbRef = db.getReference("messages/${group.key}/${db.reference.push().key}")
 
-                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis()))
+                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis())).addOnFailureListener { exception ->  Log.d("MESSAGE", "get failed with ", exception)}
+                    break
                 }
             }
+        }.addOnFailureListener { exception ->
+            Log.d("MESSAGE", "get failed with ", exception)
         }
     }
 }

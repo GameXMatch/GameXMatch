@@ -58,8 +58,9 @@ class Swipe : Fragment(), CardStackListener {
                             for (document in result) {
                                 println(document.data)
 
-                                if (("/Users/" + document.id + "/") !in mainUser.getMainUser().likes
-                                    && ("/Users/" + document.id + "/") !in mainUser.getMainUser().dislikes) {
+                                val test = mainUser.getMainUser()
+                                if (("Users/" + document.id) !in mainUser.getMainUser().likes
+                                    && ("Users/" + document.id) !in mainUser.getMainUser().dislikes) {
                                     val user = User()
                                     user.name = document.data?.get("name") as String
                                     user.desc = document.data?.get("desc") as String
@@ -159,12 +160,12 @@ class Swipe : Fragment(), CardStackListener {
 
         val swipedUser = adapter.user[layoutManager.topPosition - 1]
 
-        val swipedUserRef = db.document("/Users/" + swipedUser.uid)
+        val swipedUserRef = db.document("Users/" + swipedUser.uid)
 
         if (direction == Direction.Left) {
-            mainUser.getMainUser().addDislike("/Users/" + swipedUser.uid + "/")
+            mainUser.getMainUser().addDislike("Users/" + swipedUser.uid)
         } else {
-            mainUser.getMainUser().addLike("/Users/" + swipedUser.uid + "/")
+            mainUser.getMainUser().addLike("Users/" + swipedUser.uid)
         }
 
         val uRef = db.collection("Users").document(SharedData.getInstance().getMainUserUUID())
@@ -173,10 +174,10 @@ class Swipe : Fragment(), CardStackListener {
             .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }
 
         //TODO : create conversation
-        if (mainUser.getMainUser().likes.contains("/Users/" + swipedUser.uid + "/") && swipedUser.likes.contains("/Users/" + mainUser.getMainUser().uid + "/")) {
+        if (mainUser.getMainUser().likes.contains("Users/" + swipedUser.uid) && swipedUser.likes.contains("Users/" + mainUser.getMainUser().uid)) {
             var inst = FirebaseDatabase.getInstance()
-            inst.getReference("/members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + mainUser.getMainUser().uid + "/").setValue(true)
-            inst.getReference("/members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + swipedUser.uid + "/").setValue(true)
+            inst.getReference("members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + mainUser.getMainUser().uid).setValue(true)
+            inst.getReference("members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + swipedUser.uid).setValue(true)
         }
 
         if (layoutManager.topPosition == adapter.itemCount) {
