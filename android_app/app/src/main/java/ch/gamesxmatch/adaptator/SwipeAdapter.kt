@@ -42,6 +42,6 @@ class SwipeAdapter(val user: ArrayList<User>) : RecyclerView.Adapter<SwipeAdapte
         holder.profileDescription.text = data.desc
         Picasso.with(parent.context).load(data.imageURL).into(holder.profilePicture)
         holder.gameList.layoutManager = GridLayoutManager(parent.context, 4)
-        holder.gameList.adapter = GameListAdaptator(sharedData.getInterestedGames(data))
+        holder.gameList.adapter = GameListAdaptor(sharedData.getInterestedGames(data))
     }
 }
