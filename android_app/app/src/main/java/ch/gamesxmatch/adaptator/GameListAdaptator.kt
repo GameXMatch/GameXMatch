@@ -1,6 +1,5 @@
 package ch.gamesxmatch.adaptator
 
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
