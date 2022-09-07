@@ -54,7 +54,7 @@ class ChatAdaptator(private val messages : ArrayList<Message>, private val left:
     }
 
     private fun matchMessage(data: Message) : Boolean {
-        return left == data.message
+        return left == data.name
     }
 
     fun update(toUpdate : Message) {
