@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.ChatAdaptator
+import ch.gamesxmatch.adaptator.ChatAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.SharedData
@@ -45,7 +45,7 @@ class Chat : AppCompatActivity() {
     lateinit var dbRef : DatabaseReference
     var db = FirebaseDatabase.getInstance()
     lateinit var dbListener : ValueEventListener
-    lateinit var chatAdaptator: ChatAdaptator
+    lateinit var chatAdaptator: ChatAdaptor
     var firstClick = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,7 +101,7 @@ class Chat : AppCompatActivity() {
         // Chat display
         recyclerView = findViewById(R.id.chat_recyclerView)
 
-        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().uid)
+        chatAdaptator = ChatAdaptor(ArrayList(), mainUser.getMainUser().uid)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = chatAdaptator
     }

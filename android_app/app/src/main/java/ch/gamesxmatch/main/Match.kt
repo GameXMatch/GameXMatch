@@ -10,21 +10,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ch.gamesxmatch.adaptator.MatchAdaptator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.adaptator.ChatAdaptator
-import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
-import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 
 /**
