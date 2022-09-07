@@ -1,8 +1,8 @@
 package ch.gamesxmatch
 
-import android.util.Log
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+
+import io.mockk.mockk
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -17,4 +17,6 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    var test = mockk<FirebaseFirestore>()
 }
