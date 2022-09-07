@@ -12,17 +12,21 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DefaultItemAnimator
 import ch.gamesxmatch.R
-import ch.gamesxmatch.adaptator.SwipeAdapter
+import ch.gamesxmatch.adaptor.SwipeAdaptor
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.yuyakaido.android.cardstackview.*
 import kotlin.collections.ArrayList
 
-
+/**
+ * Activity handling the swipe action.
+ *
+ * This activity transitions doesn't transition to any other activity or fragments
+ */
 class Swipe : Fragment(), CardStackListener {
 
     // TODO : Implement refresh of the cards
@@ -35,12 +39,12 @@ class Swipe : Fragment(), CardStackListener {
 
     lateinit var db: FirebaseFirestore
 
-    lateinit var adapter : SwipeAdapter
+    lateinit var adapter : SwipeAdaptor
     lateinit var layoutManager: CardStackLayoutManager
     val mainUser = SharedData.getInstance()
 
     fun getRecommendedUsers(uid: String) {
-        val tmp = ArrayList<User>()
+        val tmpUser = ArrayList<User>()
 
         db.collection("Users")
             .document(uid)
@@ -57,14 +61,40 @@ class Swipe : Fragment(), CardStackListener {
                             for (document in result) {
                                 println(document.data)
 
-                                if (db.document("/Users/" + document.id) !in mainUser.getMainUser().likes
-                                    && db.document("/Users/" + document.id) !in mainUser.getMainUser().dislikes) {
-                                    val user = document.toObject<User>()
+                                val test = mainUser.getMainUser()
+                                if (("Users/" + document.id) !in mainUser.getMainUser().likes
+                                    && ("Users/" + document.id) !in mainUser.getMainUser().dislikes) {
+                                    val user = User()
+                                    user.name = document.data?.get("name") as String
+                                    user.desc = document.data?.get("desc") as String
+
+                                    val tmp1 = ArrayList<String>()
+                                    for (doc in document.data?.get("likes") as ArrayList<DocumentReference>)
+                                    {
+                                        tmp1.add(doc.path)
+                                    }
+                                    user.likes = tmp1
+
+                                    val tmp2 = ArrayList<String>()
+                                    for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>)
+                                    {
+                                        tmp2.add(doc.path)
+                                    }
+                                    user.dislikes = tmp2
+
+                                    val tmp3 = ArrayList<String>()
+                                    for (doc in document.data?.get("games") as ArrayList<DocumentReference>)
+                                    {
+                                        tmp3.add(doc.path)
+                                    }
+                                    user.games = tmp3
+
+                                    user.imageURL = document.data?.get("imageURL") as String
                                     user.uid = document.id
-                                    tmp.add(user)
+                                    tmpUser.add(user)
                                 }
                             }
-                            adapter = SwipeAdapter(tmp)
+                            adapter = SwipeAdaptor(tmpUser)
 
                             stack_view.layoutManager = layoutManager
                             stack_view.adapter = adapter
@@ -133,12 +163,12 @@ class Swipe : Fragment(), CardStackListener {
 
         val swipedUser = adapter.user[layoutManager.topPosition - 1]
 
-        val swipedUserRef = db.document("/Users/" + swipedUser.uid)
+        val swipedUserRef = db.document("Users/" + swipedUser.uid)
 
         if (direction == Direction.Left) {
-            mainUser.getMainUser().addDislike(swipedUserRef)
+            mainUser.getMainUser().addDislike("Users/" + swipedUser.uid)
         } else {
-            mainUser.getMainUser().addLike(swipedUserRef)
+            mainUser.getMainUser().addLike("Users/" + swipedUser.uid)
         }
 
         val uRef = db.collection("Users").document(SharedData.getInstance().getMainUserUUID())
@@ -147,8 +177,10 @@ class Swipe : Fragment(), CardStackListener {
             .addOnFailureListener { e -> Log.w("SWIPE", "Error updating document", e) }
 
         //TODO : create conversation
-        if (mainUser.getMainUser().likes.contains(swipedUserRef) && swipedUser.likes.contains(db.document("/Users/" + mainUser.getMainUser().uid))) {
-            mainUser.addMatch(swipedUser)
+        if (mainUser.getMainUser().likes.contains("Users/" + swipedUser.uid) && swipedUser.likes.contains("Users/" + mainUser.getMainUser().uid)) {
+            var inst = FirebaseDatabase.getInstance()
+            inst.getReference("members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + mainUser.getMainUser().uid).setValue(true)
+            inst.getReference("members/"+ mainUser.getMainUser().uid + "_" + swipedUser.uid + "/" + swipedUser.uid).setValue(true)
         }
 
         if (layoutManager.topPosition == adapter.itemCount) {

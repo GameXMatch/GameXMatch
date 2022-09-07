@@ -19,12 +19,18 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_login.*
 
+/**
+ * Activity handling the login. Heavily inspired by :
+ * https://www.geeksforgeeks.org/google-signing-using-firebase-authentication-in-kotlin/
+ * Note : the added/modified functions are located on the bottom
+ *
+ * This activity transitions to :
+ *  - The landing page on successful log-in (Landing)
+ */
 class Login : AppCompatActivity() {
 
     lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -79,32 +85,6 @@ class Login : AppCompatActivity() {
         }
     }
 
-    // this is where we update the UI after Google signin takes place
-    private fun UpdateUI(account: GoogleSignInAccount) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
-        firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                sharedData.setTempUUID(firebaseAuth.currentUser?.uid.toString())
-                val docRef = db.collection("Users").document(sharedData.getMainUserUUID())
-                docRef.get()
-                    .addOnSuccessListener { document ->
-                        if (!document.exists()) {
-                            addUser()
-                            println("ahoy")
-                        }
-
-                    }
-                    .addOnFailureListener { exception ->
-                        println("get failed with $exception")
-                    }
-                Handler(Looper.getMainLooper()).postDelayed({
-                    val intent = Intent(this, Landing::class.java)
-                    startActivity(intent)
-                    finish()
-                }, 1000)
-            }
-        }
-    }
 
     override fun onStart() {
         super.onStart()
@@ -116,6 +96,46 @@ class Login : AppCompatActivity() {
         }
     }
 
+    // this is where we update the UI after Google signin takes place
+    private fun UpdateUI(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        firebaseAuth.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                handleLogIn()
+            }
+        }
+    }
+
+    /**
+     * Queries the database to check if the user exists, adds the user if not
+     * Note : default delay was set at 1 second to ensure that the data gets downloaded in time
+     * Very janky, but it works for the scope of this project
+     */
+    private fun handleLogIn() {
+        sharedData.setTempUUID(firebaseAuth.currentUser?.uid.toString())
+        val docRef = db.collection("Users").document(sharedData.getMainUserUUID())
+
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (!document.exists()) {
+                    addUser()
+                }
+            }
+            .addOnFailureListener { exception ->
+                println("get failed with $exception")
+            }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            val intent = Intent(this, Landing::class.java)
+            startActivity(intent)
+            finish()
+        }, 1000)
+    }
+
+
+    /**
+     * Creates the user in the database
+     */
     private fun addUser() {
         sharedData.setTempUUID(firebaseAuth.currentUser?.uid.toString())
         val db = Firebase.firestore
