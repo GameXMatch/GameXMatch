@@ -19,13 +19,19 @@ import ch.gamesxmatch.data.User
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.squareup.picasso.Picasso
-import java.io.Serializable
 import kotlin.collections.ArrayList
 
+/**
+ * Activity serving the purpose of being a live chat between two users
+ *
+ * This activity transitions to :
+ *  - The profile of the match the user is chatting with (MatchProfile)
+ *  - The last activity that was active before arriving here. This activity should be the
+ *    the main app, on the fragment displaying the matches (CoreApp / Match)
+ */
 class Chat : AppCompatActivity() {
 
-    // TODO : Get the chat data
-    // TODO : Implement the firebase chat like app
+    // Components
     lateinit var matchNameText : TextView
     lateinit var recyclerView: RecyclerView
     lateinit var returnButton: ImageButton
@@ -33,9 +39,9 @@ class Chat : AppCompatActivity() {
     lateinit var messageEditText: EditText
     lateinit var profilePictureImageView: ImageView
 
+    // Data
     var mainUser = SharedData.getInstance()
     lateinit var chatUser : User
-    var id : Int = 0
     lateinit var dbRef : DatabaseReference
     var db = FirebaseDatabase.getInstance()
     lateinit var dbListener : ValueEventListener
@@ -46,97 +52,68 @@ class Chat : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         initComponents()
         getMatchData()
-        setupMessageDisplay()
+        initChatDataLogic()
     }
 
+    /**
+     * Initialise the components
+     */
     private fun initComponents(){
         setContentView(R.layout.activity_chat)
-        profilePictureImageView = findViewById(R.id.chat_profile_picture)
-        recyclerView = findViewById(R.id.chat_recyclerView)
         initProfileInfo()
-        setRetunButton()
-        setSendButton()
-
+        initReturnButton()
+        initChatComponents()
     }
 
-    private fun getMatchData(){
-        // Data from the match activity
-        val extras = intent.extras
-        if (extras != null) {
-            chatUser = extras.get("match") as User
-
-            matchNameText.setText(chatUser.name)
-            Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
-
-            db.getReference("members").get().addOnSuccessListener { snapshot ->
-                for (group in snapshot.children)
-                {
-                    if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
-                        dbRef = db.getReference("messages/${group.key}")
-
-                        dbListener = object : ValueEventListener {
-                            var first = true
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                if(first) {
-                                    for (message in snapshot.children) {
-                                        message.getValue<Message>()
-                                            ?.let { chatAdaptator.update(it) }
-                                    }
-                                    recyclerView.scrollToPosition((snapshot.childrenCount - 1).toInt())
-                                    first = false
-                                }
-                                else {
-
-                                    val message = snapshot.children.last().getValue<Message>()
-                                    if(message != null){
-                                        chatAdaptator.update(message)
-                                    }
-                                }
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-
-                            }
-
-                        }
-                        dbRef.addValueEventListener(dbListener)
-                    }
-                }
-            }
-        }
-    }
-
-    private fun setupMessageDisplay(){
-        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().uid)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = chatAdaptator
-    }
-
-    private fun setRetunButton(){
+    /**
+     * Initialises the button closing the chat
+     */
+    private fun initReturnButton(){
         returnButton = findViewById(R.id.chat_imageButton_back)
         returnButton.setOnClickListener{
             finish()
         }
     }
 
-    private fun setSendButton(){
+    /**
+     * Initialises the different components of the chat
+     */
+    private fun initChatComponents(){
         sendButton = findViewById(R.id.chat_send_imagebutton)
+
+        // Send message and reset the value on message sent
         sendButton.setOnClickListener{
             val message = messageEditText.text.toString()
             sendMessage(message)
             messageEditText.setText("")
         }
-    }
 
-    private fun initProfileInfo(){
-        matchNameText = findViewById(R.id.chat_matchName_text)
         messageEditText = findViewById(R.id.chat_editText_message)
+
+        // Delete "enter your message here" on click
         messageEditText.setOnFocusChangeListener{ view: View, b: Boolean ->
             if(firstClick){
                 messageEditText.setText("")
                 firstClick = false
             }
         }
+
+        // Chat display
+        recyclerView = findViewById(R.id.chat_recyclerView)
+
+        chatAdaptator = ChatAdaptator(ArrayList(), mainUser.getMainUser().uid)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = chatAdaptator
+    }
+
+    /**
+     * Initialises the components that will hold the match's data for this activity
+     */
+    private fun initProfileInfo(){
+        profilePictureImageView = findViewById(R.id.chat_profile_picture)
+        matchNameText = findViewById(R.id.chat_matchName_text)
+
+        // Click listeners for the transition to the user's profile
         matchNameText.setOnClickListener{
             redirectToProfile()
         }
@@ -145,22 +122,104 @@ class Chat : AppCompatActivity() {
         }
     }
 
-    private fun redirectToProfile(){
-        // TODO
+    /**
+     * Transition to the match's profile
+     */
+    private fun redirectToProfile() {
         val intent = Intent(this, MatchProfile::class.java)
         intent.putExtra("match", chatUser)
         startActivity(intent)
-        println("clicked")
     }
 
+    /**
+     * Returns the data of the match if it exits. Closes the activity otherwise
+     */
+    private fun getMatchData() {
+        // Data from the match activity
+        val extras = intent.extras
+        if (extras != null) {
+            chatUser = extras.get("match") as User
+            matchNameText.setText(chatUser.name)
+            Picasso.with(this).load(chatUser.imageURL).into(profilePictureImageView)
+        } else {
+            finish()
+        }
+    }
+
+    /**
+     * Handles the fetching of messages and the UI update. Handles finding the user uuid pair.
+     */
+    private fun initChatDataLogic() {
+        db.getReference("members").get().addOnSuccessListener { snapshot ->
+            for (group in snapshot.children) {
+                if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
+                    dbRef = db.getReference("messages/${group.key}")
+                    initMessageListener()
+                }
+            }
+        }
+    }
+
+    /**
+     * Allows the activity to get the messages and listens for new ones
+     */
+    private fun initMessageListener() {
+        dbListener = object : ValueEventListener {
+            var first = true
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(first) {
+                    getAllMessages(snapshot)
+                    first = false
+                }
+                else {
+                    getLastMessage(snapshot)
+                }
+                // Set the view height
+                recyclerView.scrollToPosition((snapshot.childrenCount - 1).toInt())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        }
+        dbRef.addValueEventListener(dbListener)
+    }
+
+    /**
+     * Gets all the messages of a discussion. Used for the first access of the chat
+     */
+    private fun getAllMessages(snapshot : DataSnapshot) {
+        for (message in snapshot.children) {
+            message.getValue<Message>()
+                ?.let { chatAdaptator.update(it) }
+        }
+    }
+
+    /**
+     * Gets the last added message. Used once the chat is up and running, waiting for new messages
+     */
+    private fun getLastMessage(snapshot : DataSnapshot) {
+        val message = snapshot.children.last().getValue<Message>()
+        if(message != null){
+            chatAdaptator.update(message)
+        }
+    }
+
+
+    /**
+     * Sends a query to the database
+     */
     private fun sendMessage(message : String){
         db.getReference("members/").get().addOnSuccessListener { snapshot ->
-            for (group in snapshot.children)
-            {
+            for (group in snapshot.children) {
                 if (group.hasChild(chatUser.uid) && group.hasChild(mainUser.getMainUser().uid)) {
                     dbRef = db.getReference("messages/${group.key}/${db.reference.push().key}")
 
-                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis())).addOnFailureListener { exception ->  Log.d("MESSAGE", "get failed with ", exception)}
+                    dbRef.setValue(Message(message, mainUser.getMainUser().uid, System.currentTimeMillis()))
+                        .addOnFailureListener{
+                                exception ->  Log.d("MESSAGE", "get failed with ", exception)
+                        }
                     break
                 }
             }
