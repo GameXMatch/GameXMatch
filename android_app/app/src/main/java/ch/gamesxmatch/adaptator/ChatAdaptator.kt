@@ -39,6 +39,7 @@ class ChatAdaptator(private val messages : ArrayList<Message>, private val left:
     private fun bindValues(data: Message, holder: ViewHolder) {
         if(matchMessage(data)){
             setMargins(margin_side, margin_default, holder.message)
+            holder.message.setBackgroundColor(Color.parseColor(background_match))
         }
         else{
             setMargins(margin_default, margin_side, holder.message)
