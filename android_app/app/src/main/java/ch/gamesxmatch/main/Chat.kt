@@ -17,7 +17,6 @@ import ch.gamesxmatch.data.User
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.getValue
 import com.squareup.picasso.Picasso
-import java.util.*
 import kotlin.collections.ArrayList
 
 class Chat : AppCompatActivity() {
@@ -73,9 +72,21 @@ class Chat : AppCompatActivity() {
                         dbRef = db.getReference("/messages/${group.key}/")
 
                         dbListener = object : ValueEventListener {
+                            var first = true
                             override fun onDataChange(snapshot: DataSnapshot) {
-                                for (message in snapshot.children) {
-                                    message.getValue<Message>()?.let { chatAdaptator.update(it) }
+                                if(first) {
+                                    for (message in snapshot.children) {
+                                        message.getValue<Message>()
+                                            ?.let { chatAdaptator.update(it) }
+                                    }
+                                    first = false
+                                }
+                                else {
+
+                                    val message = snapshot.children.last().getValue<Message>()
+                                    if(message != null){
+                                        chatAdaptator.update(message)
+                                    }
                                 }
                             }
 
