@@ -2,6 +2,7 @@ package ch.gamesxmatch.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -37,6 +38,7 @@ class Chat : AppCompatActivity() {
     var db = FirebaseDatabase.getInstance()
     lateinit var dbListener : ValueEventListener
     lateinit var chatAdaptator: ChatAdaptator
+    var firstClick = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,16 +122,23 @@ class Chat : AppCompatActivity() {
         sendButton.setOnClickListener{
             val message = messageEditText.text.toString()
             sendMessage(message)
+            messageEditText.setText("")
         }
     }
 
     private fun initProfileInfo(){
         matchNameText = findViewById(R.id.chat_matchName_text)
         messageEditText = findViewById(R.id.chat_editText_message)
+        messageEditText.setOnFocusChangeListener{ view: View, b: Boolean ->
+            if(firstClick){
+                messageEditText.setText("")
+                firstClick = false
+            }
+        }
         matchNameText.setOnClickListener{
             redirectToProfile()
         }
-        messageEditText.setOnClickListener{
+        profilePictureImageView.setOnClickListener{
             redirectToProfile()
         }
     }
