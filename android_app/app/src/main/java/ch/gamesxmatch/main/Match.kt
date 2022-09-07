@@ -111,26 +111,26 @@ class Match : Fragment() {
                         user.name = document.data?.get("name") as String
                         user.desc = document.data?.get("desc") as String
 
-                        val tmp = ArrayList<String>()
+                        val tmp1 = ArrayList<String>()
                         for (doc in document.data?.get("likes") as ArrayList<DocumentReference>)
                         {
-                            tmp.add(doc.path)
+                            tmp1.add(doc.path)
                         }
-                        user.likes = tmp
+                        user.likes = tmp1
 
-                        tmp.clear()
+                        val tmp2 = ArrayList<String>()
                         for (doc in document.data?.get("dislikes") as ArrayList<DocumentReference>)
                         {
-                            tmp.add(doc.path)
+                            tmp2.add(doc.path)
                         }
-                        user.dislikes = tmp
+                        user.dislikes = tmp2
 
-                        tmp.clear()
+                        val tmp3 = ArrayList<String>()
                         for (doc in document.data?.get("games") as ArrayList<DocumentReference>)
                         {
-                            tmp.add(doc.path)
+                            tmp3.add(doc.path)
                         }
-                        user.games = tmp
+                        user.games = tmp3
 
                         user.imageURL = document.data?.get("imageURL") as String
                         user.uid = document.id
