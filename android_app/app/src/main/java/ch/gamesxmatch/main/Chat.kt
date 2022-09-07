@@ -82,6 +82,7 @@ class Chat : AppCompatActivity() {
                                         message.getValue<Message>()
                                             ?.let { chatAdaptator.update(it) }
                                     }
+                                    recyclerView.scrollToPosition((snapshot.childrenCount - 1).toInt())
                                     first = false
                                 }
                                 else {
