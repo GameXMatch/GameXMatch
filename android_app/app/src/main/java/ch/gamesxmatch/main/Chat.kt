@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.ChatAdaptor
+import ch.gamesxmatch.adaptor.ChatAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.Message
 import ch.gamesxmatch.data.SharedData

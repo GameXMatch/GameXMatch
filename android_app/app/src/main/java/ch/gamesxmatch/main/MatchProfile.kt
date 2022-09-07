@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.GameListAdaptor
+import ch.gamesxmatch.adaptor.GameListAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User

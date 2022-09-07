@@ -1,4 +1,4 @@
-package ch.gamesxmatch.adaptator
+package ch.gamesxmatch.adaptor
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -68,7 +68,7 @@ open class GameListAdaptor(val games : ArrayList<Game>, private val listener: Bo
     }
 
     /**
-     * Checks if the user already added the game among the interested ones 
+     * Checks if the user already added the game among the interested ones
      */
     private fun isTheUserInterestedInGame(holder: ViewHolder) : Boolean{
         val game = holder.uuid.text.toString()

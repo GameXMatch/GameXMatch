@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ch.gamesxmatch.adaptator.MatchAdaptator
+import ch.gamesxmatch.adaptor.MatchAdaptor
 import ch.gamesxmatch.R
 import ch.gamesxmatch.data.SharedData
 import ch.gamesxmatch.data.User
@@ -43,7 +43,7 @@ class Match : Fragment() {
     var db = FirebaseDatabase.getInstance()
     private var fire = Firebase.firestore
     lateinit var dbListener : ValueEventListener
-    lateinit var matchAdaptator: MatchAdaptator
+    lateinit var matchAdaptator: MatchAdaptor
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +64,7 @@ class Match : Fragment() {
      */
     private fun initComponents() {
         recycleView = parentView.findViewById(R.id.match_recycleView)
-        matchAdaptator = MatchAdaptator(ArrayList())
+        matchAdaptator = MatchAdaptor(ArrayList())
         recycleView.layoutManager = LinearLayoutManager(parentContext)
         recycleView.adapter = matchAdaptator
     }
