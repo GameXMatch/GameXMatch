@@ -10,9 +10,6 @@ data class Game(
     var image : Bitmap? = null,
     var imageURL : String = ""
 ) {
-    fun setImageBase64(data : String){
-        imageURL = data
-    }
 
     fun convertStringToBitmap(){
         if(imageURL != "") {
