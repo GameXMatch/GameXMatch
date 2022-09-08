@@ -93,6 +93,11 @@ Great! Now create your **feature_branch** for that issue, get on your Android St
 - Oppo Reno 6, Android 12
 - OnePlus 6t, Android 9
 
+**Tested and not Working on** :
+- Samsung Galaxy S7, Android 8
+
+Not Android 8 compatible!
+
 ## Developpement Documentations
 
 **Developpment specification :** https://docs.google.com/document/d/191YHxBswy8hhTQdy3O6hfsaYRmU11xEqwqKFHRIIMS0/edit#
