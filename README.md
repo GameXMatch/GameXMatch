@@ -82,7 +82,7 @@ As new member of the team, you might start by creating an issue. When creating a
 
 Once created, the issue will be put automatically in the **NEW** column of the kanban.
 
-Great! Now create your **feature_branch** for that issue get on your Android Studio IDE and have fun coding on the GameXMatch app ;)
+Great! Now create your **feature_branch** for that issue, get on your Android Studio IDE, and have fun coding on the GameXMatch app ;)
 
 ## Developpement Documentations
 
