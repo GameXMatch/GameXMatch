@@ -84,6 +84,15 @@ Once created, the issue will be put automatically in the **NEW** column of the k
 
 Great! Now create your **feature_branch** for that issue, get on your Android Studio IDE, and have fun coding on the GameXMatch app ;)
 
+## Device Tests
+
+**Tested and working on** :
+- Samsung Galaxy S20 G5, Android 12
+- Samsung Galaxy A7, Android 9
+- Google Pixel 5, Android 13
+- Oppo Reno 6, Android 12
+- OnePlus 6t, Android 9
+
 ## Developpement Documentations
 
 **Developpment specification :** https://docs.google.com/document/d/191YHxBswy8hhTQdy3O6hfsaYRmU11xEqwqKFHRIIMS0/edit#
