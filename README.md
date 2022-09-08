@@ -48,7 +48,7 @@ Start by asking permission to join the project as Contributor and wait that your
 
 ![gamexmatch add sha to firebase](https://user-images.githubusercontent.com/45587342/189119461-6e6215ee-6a72-4c19-833a-ecbcd4853573.png)
 
-Great, now you have your Android Studio environment connected to Firebase and are ready to start working on issues or creating your own and work on it :)
+Great, now you have your Android Studio environment for development. :)
 
 ## Developpement process
 
@@ -79,6 +79,10 @@ Please respect this developpement process for your developpement.
 As new member of the team, you might start by creating an issue. When creating an issue, make sure that the description of the issue you will work on is clear an understandable. Make also sure you assigned yourself to it (or others if you are a group working on it) and don't forget to select GameXMatch DevLog to add the issue to the kanban like in the image below :
 
 ![image](https://user-images.githubusercontent.com/45587342/189128245-a4d069d3-8cea-447e-8885-e2e2072bafdb.png)
+
+Once created, the issue will be put automatically in the **NEW** column of the kanban.
+
+Great! Now create your **feature_branch** for that issue get on your Android Studio IDE and have fun coding on the GameXMatch app ;)
 
 ## Developpement Documentations
 
