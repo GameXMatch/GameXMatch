@@ -42,7 +42,7 @@ The purpose is to match with a player that has the same games/interests/skill le
 
 ![CaptureL](https://user-images.githubusercontent.com/48253621/189080851-306d5c7d-acb6-47f6-b241-2e884b948ef1.PNG)
 
-- In **Project settings -> General** Scroll to the bottom of the page, select the **GameXMatch** android app and click on **Add fingerprint**, then add your SHA1 you saved in the **Frontend** step. Once added, save.
+- In **Project settings -> General**, scroll to the bottom of the page, select the **GameXMatch** android app and click on **Add fingerprint**, then add your SHA1 you saved in the **Frontend** step. Once added, save.
 
 ![gamexmatch add sha to firebase](https://user-images.githubusercontent.com/45587342/189119461-6e6215ee-6a72-4c19-833a-ecbcd4853573.png)
 
@@ -71,7 +71,7 @@ Please respect this developpement process for your developpement.
 
 ![CaptureS](https://user-images.githubusercontent.com/48253621/189082332-081948ae-4e89-43be-9e77-6778cf90937f.PNG)
 
-###Issues
+### Issues
 As new member of the team, you might start by creating an issue. When creating an issue, make sure that the description of the issue you will work on is clear an understandable. Make also sure you assigned yourself to it (or others if you are a group working on it) and don't forget to select GameXMatch DevLog to add the issue to the kanban like in the image below :
 
 ![image](https://user-images.githubusercontent.com/45587342/189128245-a4d069d3-8cea-447e-8885-e2e2072bafdb.png)
