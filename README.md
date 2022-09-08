@@ -91,3 +91,5 @@ Great! Now create your **feature_branch** for that issue, get on your Android St
 **Landing page :** https://docs.google.com/document/d/1hIhWbfQUu7bVAG6cm5ziwfVQErA8AcgApWPMfNcTUQ8/edit#heading=h.kbil6u49bvc9
 
 **Mockup :** https://www.figma.com/file/LT0akmI2ndpGRNxqvKgZYB/GameXMatch?node-id=0%3A1
+
+**Trailer :** https://www.youtube.com/watch?v=ZBEqnuNclTw
