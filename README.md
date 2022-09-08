@@ -53,11 +53,11 @@ There are 3 type of branches :
 
 
 - **main** : production/release branch. Generates a new release. Never work directly on this branch! (Unless you edit the readme like me right now :) )
-Once the **android_dev** branch is functionnal and has enough features for a new release. Open a PR to merge *android_dev* to **main**. At least one member of the GameXMatch team has to review your PR to be merged. Once merged, github actions will automatically generate a signed .apk and .aab on the release tab of github so you can download it.
+Once the **android_dev** branch is functionnal and has enough features for a new release, open a PR to merge *android_dev* to **main**. At least one member of the GameXMatch team has to review your PR to be merged. Once merged, github actions will automatically generate a signed .apk and .aab on the release tab of github.
 
 - **android_dev** : The branch of developpment, the most updated, where all the **feature_branches** are merged into. Never work directly on this branch! You will create **features_branches** and merge into android_dev. When you create your **feature_branches** you will always take from **android_dev**. When you have a feature done, create PR to merge your **feature_branch** to **android_dev**. This will automatically start some unit tests to check that te code compiles etc...To be merged the tests need to pass. Furthemore, one member of the GameXmatch team has to review your PR to be able to merge.
 
-- **feature_branches** : All other branches you will see and create. If you want to contribute, this is where it starts. You will have to create a **feature_branch** to start adding a feature.
+- **feature_branches** : All other branches you will see and create. If you want to contribute, this is where it starts. You will have to create a **feature_branch** to start adding a feature. Once your feature is done, you create a PR to merge it to **android_dev**.
 
 ### Kanban
 Please respect this developpement process for your developpement.
