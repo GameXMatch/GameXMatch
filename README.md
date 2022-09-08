@@ -20,11 +20,19 @@ The purpose is to match with a player that has the same games/interests/skill le
 
 [android_app/](android_app) Contains the sources of the app.
 
+[android_app/.../adaptor/](android_app/app/src/main/java/ch/gamesxmatch/adaptor) Contains all the adaptor for our classes
+
+[android_app/.../authentication/](android_app/app/src/main/java/ch/gamesxmatch/authentication) Contains all the classes for the authentication with third aprty providers
+
+[android_app/.../data/](android_app/app/src/main/java/ch/gamesxmatch/data) Conatins all the structures that contains data for our classes
+
+[android_app/.../main/](android_app/app/src/main/java/ch/gamesxmatch/main) Contains all the classes for the differents activities
+
 ## Setup
 
-- Clone the repo.
+- Clone the repo and open it with Android Studio.
 - Ask for the Firebase Account credentials to a member of the project.
-- Run this command, **./gradlew signingReport**, on your Android Studio and copy the SHA1.
+- Run this command, **./gradlew signingReport**, on your terminal in Android Studio and copy the SHA1.
 - Go to the Firebase Account, click on the project **GameXMatch** and click on the application and then the cogwhell : 
 
 ![CaptureL](https://user-images.githubusercontent.com/48253621/189080851-306d5c7d-acb6-47f6-b241-2e884b948ef1.PNG)
