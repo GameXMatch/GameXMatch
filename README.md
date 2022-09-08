@@ -30,6 +30,8 @@ The purpose is to match with a player that has the same games/interests/skill le
 
 ## Setup
 
+Start by asking permission to join the project as Contributor and wait that your demand is accepted. Once done, you avec access to work on the repository of the project.
+
 ### Frontend
 - Clone the repository and open it with Android Studio.
 - Run this command, **./gradlew signingReport**, on your terminal in Android Studio and copy the SHA1 (will be needed to access Firebase later on the Backend part)
@@ -46,6 +48,8 @@ The purpose is to match with a player that has the same games/interests/skill le
 
 ![gamexmatch add sha to firebase](https://user-images.githubusercontent.com/45587342/189119461-6e6215ee-6a72-4c19-833a-ecbcd4853573.png)
 
+Great, now you have your Android Studio environment connected to Firebase and are ready to start working on issues or creating your own and work on it :)
+
 ## Developpement process
 
 ### Branches
@@ -53,7 +57,7 @@ There are 3 type of branches :
 
 
 - **main** : production/release branch. Generates a new release. Never work directly on this branch! (Unless you edit the readme like me right now :) )
-Once the **android_dev** branch is functionnal and has enough features for a new release, open a PR to merge *android_dev* to **main**. At least one member of the GameXMatch team has to review your PR to be merged. Once merged, github actions will automatically generate a signed .apk and .aab on the release tab of github.
+Once the **android_dev** branch is functionnal and has enough features for a new release, open a PR to merge **android_dev** to **main**. At least one member of the GameXMatch team has to review your PR to be merged. Once merged, github actions will automatically generate a signed .apk and .aab on the release tab of github.
 
 - **android_dev** : The branch of developpment, the most updated, where all the **feature_branches** are merged into. Never work directly on this branch! You will create **features_branches** and merge into android_dev. When you create your **feature_branches** you will always take from **android_dev**. When you have a feature done, create PR to merge your **feature_branch** to **android_dev**. This will automatically start some unit tests to check that te code compiles etc...To be merged the tests need to pass. Furthemore, one member of the GameXmatch team has to review your PR to be able to merge.
 
