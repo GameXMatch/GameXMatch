@@ -30,19 +30,36 @@ The purpose is to match with a player that has the same games/interests/skill le
 
 ## Setup
 
-- Clone the repo and open it with Android Studio.
-- Ask for the Firebase Account credentials to a member of the project.
-- Run this command, **./gradlew signingReport**, on your terminal in Android Studio and copy the SHA1.
-- Go to the Firebase Account, click on the project **GameXMatch** and click on the application and then the cogwhell : 
+### Frontend
+- Clone the repository and open it with Android Studio.
+- Run this command, **./gradlew signingReport**, on your terminal in Android Studio and copy the SHA1 (will be needed to access Firebase later on the Backend part)
+
+### Backend
+- Go to to the [firebase website](https://firebase.google.com)
+- Login with the credentials of the project (The credentials will be given to you once HR and Tech Department validated your application on the GameXMatch team ;) ). More seriously, ask a member of the team :).(Assistants and Professor will find the credentials on the last page of the Accéder_au_projet.pdf)
+- Once logged in click on the console on the right corner and then on the **GameXMatch** Firebase Project.
+- Then click on the application as seen in the image below and then on the little cogwhell that will appear : 
 
 ![CaptureL](https://user-images.githubusercontent.com/48253621/189080851-306d5c7d-acb6-47f6-b241-2e884b948ef1.PNG)
 
-- Got to the bottom of the page and click on **Add fingerprint**, then add your SHA1 and save.
+- In **Project settings -> General** Scroll to the bottom of the page, select the **GameXMatch** android app and click on **Add fingerprint**, then add your SHA1 you saved in the **Frontend** step. Once added, save.
 
-![Capture](https://user-images.githubusercontent.com/48253621/189080842-8e1cc9ab-4574-4761-97cf-26c65742e634.PNG)
+![gamexmatch add sha to firebase](https://user-images.githubusercontent.com/45587342/189119461-6e6215ee-6a72-4c19-833a-ecbcd4853573.png)
 
 ## Developpement process
 
+### Branches
+There are 3 type of branches :
+
+
+- **main** : production/release branch. Generates a new release. Never work directly on this branch! (Unless you edit the readme like me right now :) )
+Once the **android_dev** branch is functionnal and has enough features for a new release. Open a PR to merge *android_dev* to **main**. At least one member of the GameXMatch team has to review your PR to be merged. Once merged, github actions will automatically generate a signed .apk and .aab on the release tab of github so you can download it.
+
+- **android_dev** : The branch of developpment, the most updated, where all the **feature_branches** are merged into. Never work directly on this branch! You will create **features_branches** and merge into android_dev. When you create your **feature_branches** you will always take from **android_dev**. When you have a feature done, create PR to merge your **feature_branch** to **android_dev**. This will automatically start some unit tests to check that te code compiles etc...To be merged the tests need to pass. Furthemore, one member of the GameXmatch team has to review your PR to be able to merge.
+
+- **feature_branches** : All other branches you will see and create. If you want to contribute, this is where it starts. You will have to create a **feature_branch** to start adding a feature.
+
+### Kanban
 Please respect this developpement process for your developpement.
 
 - **New** : New feature which should be implemented
@@ -53,6 +70,10 @@ Please respect this developpement process for your developpement.
 - **Done** : Feature is finished and released on **main** branch
 
 ![CaptureS](https://user-images.githubusercontent.com/48253621/189082332-081948ae-4e89-43be-9e77-6778cf90937f.PNG)
+
+As new member of the team, you might start by creating an issue. When creating an issue, make sure that the description of the issue you will work on is clear an understandable. Make also sure you assigned yourself to it (or others if you are a group working on it) and don't forget to select GameXMatch DevLog to add the issue to the kanban like in the image below :
+
+![image](https://user-images.githubusercontent.com/45587342/189128245-a4d069d3-8cea-447e-8885-e2e2072bafdb.png)
 
 ## Developpement Documentations
 
