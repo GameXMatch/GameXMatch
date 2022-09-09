@@ -106,4 +106,6 @@ Not Android 8 compatible!
 
 **Mockup :** https://www.figma.com/file/LT0akmI2ndpGRNxqvKgZYB/GameXMatch?node-id=0%3A1
 
+**Presentation :** https://docs.google.com/presentation/d/1GjatkY-wW8StKsELyl1f9lD5ST7C1fJDGEHRZmBZvhk/edit#slide=id.g1502dcb2f7c_2_25
+
 **Trailer :** https://www.youtube.com/watch?v=ZBEqnuNclTw
